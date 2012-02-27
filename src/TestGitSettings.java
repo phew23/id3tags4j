@@ -8,5 +8,5 @@
  * @author phew
  */
 public class TestGitSettings {
-    
+    private String test;
 }
