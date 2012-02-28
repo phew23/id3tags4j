@@ -21,17 +21,43 @@
                          |   Date: 28.02.2012         |
                          +----------------------------+
 
-This document was created for a better understanding of ID3v2 tags and to 
-illustrate the similiarities and differences within different subversions of
-those.
 
-INDEX
-1.0 General ID3v2 structures
-2.0 ID3v2 header
-3.0 ID3v2 body
+Abstract
+
+    This document was created for a better understanding of ID3v2 tags and to 
+    illustrate the similiarities and differences within different subversions of
+    those.
 
 
-1.0 General ID3v2 structures
+
+1.      Conventions in this document
+2.      General ID3v2 tag structure
+3.      ID3v2 tag header
+  3.1.  ID3v2 tag header's flag byte
+  3.2.  ID3v2 tag extended header
+4.      ID3v2 tag body
+
+
+
+
+
+1.  Conventions in this document
+
+    This document will use the same example indicators and conventions as the 
+    informal id3v2 2.0 standard <http://www.id3.org/id3v2-00>, described by M. 
+    Nilsson as follows:
+
+        In the examples, text within "" is a text string exactly as it appears 
+        in a file. Numbers preceded with $ are hexadecimal and numbers preceded 
+        with % are binary. $xx is used to indicate a byte with unknown content. 
+        %x is used to indicate a bit with unknown content. The most significant 
+        bit (MSB) of a byte is called 'bit 7' and the least significant bit 
+        (LSB) is called 'bit 0'.
+
+
+
+
+2.      General ID3v2 structures
                                                                                 
 +-----------------------------------------------------------------------------+
 |                                  ID3v2 tag                                  |
@@ -66,31 +92,86 @@ INDEX
 
 
 
-enum flags - google enum examples
 
-ID3v2 Header Flag Byte Bits (OVERVIEW)
- +------------------------+------------+------------+------------+
- |          ID3v2 version | v2.0 / 220 | v3.0 / 230 | v4.0 / 240 |
- +------------------------+------------+------------+------------+
- |      unsynchronization |    true    |    true    |    true    |
- +------------------------+------------+------------+------------+
- |            compression |    true    |     -      |     -      |
- +------------------------+------------+------------+------------+
- |        extended header |     -      |    true    |    true    |
- +------------------------+------------+------------+------------+
- | experimental indicator |     -      |    true    |    true    |
- +------------------------+------------+------------+------------+
- |                 footer |     -      |     -      |    true    |
- +------------------------+------------+------------+------------+
+3.      ID3v2 tag header
+
+    The ID3v2 tag header should be the first information in the file, its 10 
+    bytes as illustrated below:
+
+ +---------------------------------------------------------------------------+
+ |                              ID3v2 tag header                             |
+ +---------------------+-----------------+-----------------+-----------------+
+ |       ID3v2 version |      v2.0       |      v3.0       |       v4.0      |
+ +---------------------+--------+--------+--------+--------+---------+-------+
+                                |                 |                  |
+ +---------------------+--------+--------+--------+--------+---------+-------+
+ | ID3/file identifier | "ID3"           | "ID3"           | "ID3"           |
+ +---------------------+-----------------+-----------------+-----------------+
+ |             version | $02 00          | $03 00          | $04 00          |
+ +---------------------+-----------------+-----------------+-----------------+ 
+ |                flag | %ab000000       | %abc00000       | %abcd0000       |
+ +---------------------+-----------------+-----------------+-----------------+
+ |                size | 4 * %0xxxxxxx   | 4 * %0xxxxxxx   | 4 * %0xxxxxxx   |
+ +---------------------+-----------------+-----------------+-----------------+
+                       | 10 bytes total  | 10 bytes total  | 10 bytes total  |
+                       +-----------------+-----------------+-----------------+
+
+    For details on the flag byte's bits (%abcd0000, bit a, b, c and d) see next
+    section.
 
 
+     
+3.1     ID3v2 tag header's flag byte
 
-TRANSLATE
-+- version -+- unsynchronization -+- compression -+- extended header -+- experimental indicator -+- footer present -+
-|    200    |     yes (bit 7)     |  yes (bit 6)  |         -         |            -             |        -         |
-+-----------+---------------------+---------------+-------------------+--------------------------+------------------+
-|    230    |     yes (bit 7)     |       -       |    yes (bit 6)    |      yes (bit 5)         |        -         |
-+-----------+---------------------+---------------+-------------------+--------------------------+------------------+
-|    240    |     yes (bit 7)     |       -       |    yes (bit 6)    |      yes (bit 5)         |   yes (bit 4)    |
-+-----------+---------------------+---------------+-------------------+--------------------------+------------------+
-INTO BITS TABLE
+    The table below illustrates which flags are supported in which ID3v2 tag
+    version.
+ 
+ +-------------------+------------+------------+------------+
+ |     ID3v2 version | v2.0 / 220 | v3.0 / 230 | v4.0 / 240 |
+ +-------------------+------+-----+------+-----+------+-----+
+                            |            |            | 
+                     +------+-----+------+-----+------+-----+
+                     | supported  | supported  | supported  |
+ +-------------------+------------+------------+------------+
+ | unsynchronization |    true    |    true    |    true    |
+ +-------------------+------------+------------+------------+
+ |       compression |    true    |     -      |     -      |
+ +-------------------+------------+------------+------------+
+ |   extended header |     -      |    true    |    true    |
+ +-------------------+------------+------------+------------+
+ |      experimental |     -      |    true    |    true    |
+ +-------------------+------------+------------+------------+
+ |            footer |     -      |     -      |    true    |
+ +-------------------+------------+------------+------------+
+
+
+      
+    If the flag byte's bit is set (1) it indicates usage of the associated flag.
+
+ +---------------------------------------------------------------------------+
+ |                                  flag byte                                |
+ +---------------+-------------------+-------------------+-------------------+
+ | ID3v2 version |       v2.0        |       v3.0        |        v4.0       |
+ +---------------+---------+---------+---------+---------+----------+--------+
+                           |                   |                    |
+                 +---------+---------+---------+---------+----------+--------+
+                 |        flag       |        flag       |        flag       |
+ +---------------+-------------------+-------------------+-------------------+
+ | bit a (bit 7) | unsynchronization | unsynchronization | unsynchronization |
+ +---------------+-------------------+-------------------+-------------------+
+ | bit b (bit 6) |    compression    |  extended header  |  extended header  |
+ +---------------+-------------------+-------------------+-------------------+  
+ | bit c (bit 5) |         -         |    experimental   |   experimental    |
+ +---------------+-------------------+-------------------+-------------------+
+ | bit d (bit 4) |         -         |         -         |       footer      |
+ +---------------+-------------------+-------------------+-------------------+
+ |       (bit 3) |         -         |         -         |          -        |
+ +---------------+-------------------+-------------------+-------------------+
+ |       (bit 2) |         -         |         -         |          -        |
+ +---------------+-------------------+-------------------+-------------------+
+ |       (bit 1) |         -         |         -         |          -        |
+ +---------------+-------------------+-------------------+-------------------+
+ |       (bit 0) |         -         |         -         |          -        |
+ +---------------+-------------------+-------------------+-------------------+
+ |  flag byte    |
+ `---------------´
