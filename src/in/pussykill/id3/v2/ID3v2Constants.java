@@ -23,7 +23,7 @@ package in.pussykill.id3.v2;
 public class ID3v2Constants {
     
         /** ID3v2 tag header length */
-         public static final int ID3V2_HEADER_LENGTH = 10;
+         public static final int ID3V2_TAG_HEADER_LENGTH = 10;
     
 	/*
 	 * ID3v2 minor version bytes
