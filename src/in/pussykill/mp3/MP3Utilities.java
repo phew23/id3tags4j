@@ -34,6 +34,14 @@ import java.io.RandomAccessFile;
  */
 public class MP3Utilities {
     
+    /**
+     * Creates a new {@link MP3File}.
+     * @param path Path to the MP3 file to be read.
+     * @return A new {@link MP3File} object.
+     * @throws FileNotFoundException is thrown when the specified file does not 
+     *         exist
+     * @throws IOException is thrown when the specified file could not be read
+     */
     public static MP3File init(final String path) throws FileNotFoundException, 
             IOException {
         
