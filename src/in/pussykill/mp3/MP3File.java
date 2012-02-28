@@ -16,10 +16,29 @@
  */
 package in.pussykill.mp3;
 
+import in.pussykill.id3.v2.ID3v2Tag;
+
 /**
- *
+ * This class represents a MP3 file.
  * @author phew
  */
 public class MP3File {
+    
+    private final ID3v2Tag id3v2Tag;
+    
+    /**
+     * Creates a new MP3File with the given tag.
+     * @param id3v2Tag - {@link ID3v2Tag} for this MP3File.
+     */
+    public MP3File(ID3v2Tag id3v2Tag) {
+        this.id3v2Tag = id3v2Tag;
+    }
+    
+    /**
+     * @return The {@link ID3v2Tag} for this MP3File object.
+     */
+    public ID3v2Tag getID3v2Tag() {
+        return id3v2Tag;
+    }
     
 }
