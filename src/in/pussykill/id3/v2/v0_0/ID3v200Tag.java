@@ -16,10 +16,19 @@
  */
 package in.pussykill.id3.v2.v0_0;
 
+import in.pussykill.id3.v2.ID3v2Tag;
+import in.pussykill.id3.v2.ID3v2TagBody;
+import in.pussykill.id3.v2.ID3v2TagHeader;
+
 /**
- *
+ * This class represents an ID3v2 2.0 tag.
  * @author phew
  */
-public class ID3v200Tag {
+public class ID3v200Tag extends ID3v2Tag {
+    
+    public ID3v200Tag(ID3v2TagHeader id3v2TagHeader, 
+            ID3v2TagBody id3v2TagBody) {
+        super(id3v2TagHeader, id3v2TagBody);
+    }
     
 }
