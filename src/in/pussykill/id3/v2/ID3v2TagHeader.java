@@ -17,7 +17,7 @@
 package in.pussykill.id3.v2;
 
 /**
- * This abstract class represents an ID3v2TagHeader.
+ * This class represents an ID3v2TagHeader.
  * @author phew
  */
 public class ID3v2TagHeader {
