@@ -62,11 +62,10 @@ public class ID3v2TagHeader {
     
     /**
      * @return The length of the {@link ID3v2TagBody} for this {@link ID3v2Tag},
-     * located in its header.
+     *         located in its header.
      */
-    public int bodyLength() {
-        return ((size[0] & 0xFF) << 21) + ((size[1] & 0xFF) << 14) + 
-                ((size[2] & 0xFF) << 7) + (size[3] & 0xFF);
+    public int getBodyLength() {
+        return ID3v2Converter.id3v2TagHeaderSizeToInteger(size);
     }
     
     @Override
