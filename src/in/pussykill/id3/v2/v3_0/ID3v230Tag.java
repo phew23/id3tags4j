@@ -17,7 +17,7 @@
 package in.pussykill.id3.v2.v3_0;
 
 /**
- * This class represents an ID3v230Tag.
+ * This class represents an ID3v2 3.0 tag.
  * @author phew
  */
 public class ID3v230Tag {
