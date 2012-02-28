@@ -33,7 +33,7 @@ public class Main {
             
             MP3File mp3 = MP3Utilities.init("files/a.mp3");
             ID3v2Tag id3v2 = mp3.getID3v2Tag();
-            
+
             
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
