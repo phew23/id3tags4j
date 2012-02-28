@@ -1,0 +1,96 @@
+/*
+ * This file is part of id3tags4j, an ID3 tag library for Java.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+                         +----------------------------+
+                         | Author: phew               |
+                         | E-Mail: phew@pussykill.in  |
+                         |   Date: 28.02.2012         |
+                         +----------------------------+
+
+This document was created for a better understanding of ID3v2 tags and to 
+illustrate the similiarities and differences within different subversions of
+those.
+
+INDEX
+1.0 General ID3v2 structures
+2.0 ID3v2 header
+3.0 ID3v2 body
+
+
+1.0 General ID3v2 structures
+                                                                                
++-----------------------------------------------------------------------------+
+|                                  ID3v2 tag                                  |
++------------+--------------------------+--------------------------+----------+
+             |                          |                          |           
+           v2.0                       v3.0                       v4.0          
+             |                          |                          |           
+             |                          |                          |           
+ +-------[Header]------+    +-------[Header]------+    +-------[Header]------+ 
+ |   10 bytes length   |    | 10 bytes length     |    | 10 bytes length     | 
+ +---------------------+    +---------------------+    +---------------------+ 
+                                                                               
+                            +--[Extended Header]--+    +--[Extended Header]--+ 
+                            | variable length     |    | variable length     | 
+                            | optional            |    | optional            | 
+                            +---------------------+    +---------------------+ 
+                                                                               
+ +------[Frames]-------+    +------[Frames]-------+    +------[Frames]-------+ 
+ | variable length     |    | variable length     |    | variable length     | 
+ +---------------------+    +---------------------+    +---------------------+ 
+                                                                               
+ +------[Padding]------+    +------[Padding]------+    +------[Padding]------+ 
+ | variable length     |    | variable length     |    | variable length     | 
+ | optional            |    | optional            |    | optional            | 
+ +---------------------+    +---------------------+    +---------------------+ 
+                                                                               
+                                                       +-------[Footer]------+ 
+                                                       | 10 bytes length     | 
+                                                       | optional            | 
+                                                       +---------------------+ 
+                                                                                
+
+
+
+enum flags - google enum examples
+
+ID3v2 Header Flag Byte Bits (OVERVIEW)
+ +------------------------+------------+------------+------------+
+ |          ID3v2 version | v2.0 / 220 | v3.0 / 230 | v4.0 / 240 |
+ +------------------------+------------+------------+------------+
+ |      unsynchronization |    true    |    true    |    true    |
+ +------------------------+------------+------------+------------+
+ |            compression |    true    |     -      |     -      |
+ +------------------------+------------+------------+------------+
+ |        extended header |     -      |    true    |    true    |
+ +------------------------+------------+------------+------------+
+ | experimental indicator |     -      |    true    |    true    |
+ +------------------------+------------+------------+------------+
+ |                 footer |     -      |     -      |    true    |
+ +------------------------+------------+------------+------------+
+
+
+
+TRANSLATE
++- version -+- unsynchronization -+- compression -+- extended header -+- experimental indicator -+- footer present -+
+|    200    |     yes (bit 7)     |  yes (bit 6)  |         -         |            -             |        -         |
++-----------+---------------------+---------------+-------------------+--------------------------+------------------+
+|    230    |     yes (bit 7)     |       -       |    yes (bit 6)    |      yes (bit 5)         |        -         |
++-----------+---------------------+---------------+-------------------+--------------------------+------------------+
+|    240    |     yes (bit 7)     |       -       |    yes (bit 6)    |      yes (bit 5)         |   yes (bit 4)    |
++-----------+---------------------+---------------+-------------------+--------------------------+------------------+
+INTO BITS TABLE
