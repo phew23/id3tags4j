@@ -631,7 +631,7 @@ to attach them to the start of each source file to most effectively
 state the exclusion of warranty; and each file should have at least
 the "copyright" line and a pointer to where the full notice is found.
 
-    id3tags4j is a library for easy ID3 tag handling for mp3 files.
+    id3tags4j is an ID3 tag library for Java
     Copyright (C) 2012  phew
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
