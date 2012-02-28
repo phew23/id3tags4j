@@ -25,7 +25,7 @@ public class MP3Utilities {
     public static MP3File init(final String path) throws FileNotFoundException, 
             IOException {
         
-        ID3v2TagHeader id3v2TagHeader = null;
+        ID3v2TagHeader id3v2TagHeader;
         ID3v2TagBody id3v2TagBody = null;
         ID3v2Tag id3v2Tag = null;
         
