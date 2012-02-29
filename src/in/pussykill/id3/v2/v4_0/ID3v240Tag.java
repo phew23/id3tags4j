@@ -16,19 +16,30 @@
  */
 package in.pussykill.id3.v2.v4_0;
 
-import in.pussykill.id3.v2.ID3v2Tag;
+import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2TagBody;
 import in.pussykill.id3.v2.ID3v2TagHeader;
+import in.pussykill.id3.v2.v3_0.ID3v230Tag;
 
 /**
  * This class represents an ID3v2 4.0 tag.
  * @author phew
  */
-public class ID3v240Tag extends ID3v2Tag {
+public class ID3v240Tag extends ID3v230Tag {
     
     public ID3v240Tag(final ID3v2TagHeader id3v2TagHeader, 
                       final ID3v2TagBody id3v2TagBody) {
         super(id3v2TagHeader, id3v2TagBody);
+    }
+    
+    //The hasFooter() method still has to be tested
+    /**
+     * Tells if the {@link ID3v2Tag} contains a footer.
+     * @return true if the footer bit is set; false otherwise
+     */
+    public boolean hasFooter() {
+        return (id3v2TagHeader.getFlagsByte() & 
+                ID3v2Constants.ID3v240_FOOTER) != 0;
     }
     
 }
