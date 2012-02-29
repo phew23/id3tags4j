@@ -20,7 +20,7 @@ package in.pussykill.id3.v2;
  * This class represents an ID3v2 frame.
  * @author phew
  */
-public class ID3v2Frame {
+public abstract class ID3v2Frame {
     
     private final ID3v2FrameHeader id3v2FrameHeader;
     private final ID3v2FrameBody id3v2FrameBody;
@@ -29,6 +29,10 @@ public class ID3v2Frame {
             final ID3v2FrameBody id3v2FrameBody) {
         this.id3v2FrameHeader = id3v2FrameHeader;
         this.id3v2FrameBody = id3v2FrameBody;
+    }
+    
+    public String getIdentifier() {
+        return id3v2FrameHeader.getIdentifierString();
     }
     
     /*
