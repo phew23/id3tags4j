@@ -50,7 +50,7 @@ public class ID3v2Constants {
 	 */
 	public static final int ID3v2_UNSYNCHRONIZATION = 0x80;
 	public static final int ID3v2_EXTENDED_HEADER = 0x40;
-	public static final int ID3v2_EXPERIMENTAL = 0x20;
+	public static final int ID3v2_EXPERIMENTAL_INDICATOR = 0x20;
 	public static final int ID3v2_COMPRESSION = 0x40;
 	
 	/*
