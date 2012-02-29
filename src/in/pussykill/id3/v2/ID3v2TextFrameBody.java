@@ -16,10 +16,8 @@
  */
 package in.pussykill.id3.v2;
 
-import java.io.UnsupportedEncodingException;
-
 /**
- * This class represents all ID3v2 text frames.
+ * This class represents all ID3v2 text frame bodies.
  * @author phew
  */
 public class ID3v2TextFrameBody {
@@ -36,16 +34,7 @@ public class ID3v2TextFrameBody {
      * @return The text read from this ID3v2 text frame body.
      */
     public String getText() {
-        try {
-            if(encoding == ID3v2Constants.ID3V2_TEXT_ENCODING_ISO_8859_1)
-                return new String(information, "ISO-8859-1");
-            if(encoding == ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE)
-                return new String(information, "Unicode");
-        } 
-        catch(UnsupportedEncodingException e) {
-            System.err.println(e);
-        }
-        return null;
+        return ID3v2Utilities.getString(information, encoding);
     }
     
 }
