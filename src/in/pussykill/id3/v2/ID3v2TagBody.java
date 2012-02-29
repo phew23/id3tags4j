@@ -17,9 +17,22 @@
 package in.pussykill.id3.v2;
 
 /**
- * This abstract class represents all ID3v2TagBodys.
+ * This class represents all ID3v2 tag bodies.
  * @author phew
  */
-public abstract class ID3v2TagBody {
+public class ID3v2TagBody {
+    
+    private final ID3v2Frame[] frames;
+   
+    //TODO
+    //this is to be initialized with MP3Utilities.parseFrames() or something
+    //similiar. ID3v2TagBody body = new ID3v2TagBody(
+    //MP3Utilities.parseFrames(bytes));
+    public ID3v2TagBody(ID3v2Frame[] frames) {
+        this.frames = frames;
+    }
+    
+   
+    
     
 }
