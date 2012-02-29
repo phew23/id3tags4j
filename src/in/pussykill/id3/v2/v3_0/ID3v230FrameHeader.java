@@ -29,6 +29,8 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader {
     protected final byte[] size;
     private final byte[] flags;
     
+    //TODO:
+    //implement flag bits methods
     public ID3v230FrameHeader(byte[] b) {
         id = new byte[] { b[0], b[1], b[2], b[3] };
         size = new byte[] { b[4], b[5], b[6], b[7] };
