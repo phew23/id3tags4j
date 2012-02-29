@@ -16,6 +16,7 @@
  */
 package in.pussykill.id3.v2.v3_0;
 
+import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Tag;
 import in.pussykill.id3.v2.ID3v2TagBody;
 import in.pussykill.id3.v2.ID3v2TagHeader;
@@ -29,6 +30,36 @@ public class ID3v230Tag extends ID3v2Tag {
     public ID3v230Tag(final ID3v2TagHeader id3v2TagHeader, 
             final ID3v2TagBody id3v2TagBody) {
         super(id3v2TagHeader, id3v2TagBody);
+    }
+    
+    //The isUnsynchronized() method still has to be tested
+    /**
+     * Tells if the {@link ID3v2Tag} is using unsynchronization or not.
+     * @return true if the unsynchronized scheme bit is set; false otherwise
+     */
+    public boolean isUnsynchronized() {
+        return (id3v2TagHeader.getFlagsByte() & 
+                ID3v2Constants.ID3v2_UNSYNCHRONIZATION) != 0;
+    }
+    
+    //The hasExtendedHeader() method still has to be tested
+    /**
+     * Tells if the {@link ID3v2Tag} has an extended header.
+     * @return true if the extended header bit is set; false otherwise
+     */
+    public boolean hasExtendedHeader() {
+        return (id3v2TagHeader.getFlagsByte() &
+                ID3v2Constants.ID3v2_EXTENDED_HEADER) != 0;
+    }
+    
+    //The isExperimental() method still has to be tested
+    /**
+     * Tells if the {@link ID3v2Tag} is at experimental stage.
+     * @return true if the experimental indicator bit is set; false otherwise
+     */
+    public boolean isExperimental() {
+        return (id3v2TagHeader.getFlagsByte() &
+                ID3v2Constants.ID3v2_EXPERIMENTAL_INDICATOR) != 0;
     }
     
 }
