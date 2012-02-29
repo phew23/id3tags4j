@@ -175,3 +175,15 @@ Abstract
  +---------------+-------------------+-------------------+-------------------+
  |  flag byte    |
  `---------------´
+
+
+
+
+
+
+4.      ID3v2 tag body
+
+    The ID3v2 tag body contains frames. Those frames in turn are split into
+    a frame header and a frame body. The frame header contains information on
+    how to parse the frame body, which encodings have been used etcetera.
+    
