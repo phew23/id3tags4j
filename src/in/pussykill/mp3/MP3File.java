@@ -17,6 +17,9 @@
 package in.pussykill.mp3;
 
 import in.pussykill.id3.v2.ID3v2Tag;
+import in.pussykill.id3.v2.v0_0.ID3v200Tag;
+import in.pussykill.id3.v2.v3_0.ID3v230Tag;
+import in.pussykill.id3.v2.v4_0.ID3v240Tag;
 
 /**
  * This class represents a MP3 file.
@@ -39,6 +42,34 @@ public class MP3File {
      */
     public ID3v2Tag getID3v2Tag() {
         return id3v2Tag;
+    }
+    
+    /**
+     * @return true if this MP3File has an {@link ID3v2Tag}; false otherwise
+     */
+    public boolean hasID3v2Tag() {
+        return id3v2Tag != null;
+    }
+    
+    /**
+     * @return true if this MP3File has an {@link ID3v200Tag}; false otherwise
+     */
+    public boolean hasID3v200Tag() {
+        return id3v2Tag instanceof ID3v200Tag;
+    }
+    
+    /**
+     * @return true if this MP3File has an {@link ID3v230Tag}; false otherwise
+     */
+    public boolean hasID3v230Tag() {
+        return id3v2Tag instanceof ID3v230Tag;
+    }
+    
+    /**
+     * @return true if this MP3File has an {@link ID3v240Tag}; false otherwise
+     */
+    public boolean hasID3v240Tag() {
+        return id3v2Tag instanceof ID3v240Tag;
     }
     
 }
