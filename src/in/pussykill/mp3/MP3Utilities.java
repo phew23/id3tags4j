@@ -34,6 +34,8 @@ import java.io.RandomAccessFile;
  */
 public class MP3Utilities {
     
+    //TODO: search for "ID3" indicator, return new MP3File(null) if no ID3v2Tag 
+    //found.
     /**
      * Creates a new {@link MP3File}.
      * @param path Path to the MP3 file to be read.
