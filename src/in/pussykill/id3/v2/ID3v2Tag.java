@@ -22,8 +22,8 @@ package in.pussykill.id3.v2;
  */
 public abstract class ID3v2Tag {
     
-    private final ID3v2TagHeader id3v2TagHeader;
-    private final ID3v2TagBody id3v2TagBody;
+    protected final ID3v2TagHeader id3v2TagHeader;
+    protected final ID3v2TagBody id3v2TagBody;
     
     /**
      * Creates a new abstract ID3v2Tag from the given {@link ID3v2TagHeader}
