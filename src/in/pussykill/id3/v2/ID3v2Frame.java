@@ -31,12 +31,25 @@ public abstract class ID3v2Frame {
         this.id3v2FrameBody = id3v2FrameBody;
     }
     
+    /**
+     * @return The frame's identifier as string.
+     */
     public String getIdentifier() {
         return id3v2FrameHeader.getIdentifierString();
     }
     
-    /*
-     * TODO: check if we need setter/getter here
+    /**
+     * @return The frame's {@link ID3v2FrameHeader}.
      */
+    public ID3v2FrameHeader getID3v2FrameHeader() {
+        return id3v2FrameHeader;
+    }
+    
+    /**
+     * @return The frame's {@link ID3v2FrameBody}.
+     */
+    public ID3v2FrameBody getID3v2FrameBody() {
+        return id3v2FrameBody;
+    }
     
 }
