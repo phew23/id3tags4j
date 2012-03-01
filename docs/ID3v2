@@ -185,4 +185,7 @@ Abstract
     The ID3v2 tag body contains frames. Those frames in turn are split into
     a frame header and a frame body. The frame header contains information on
     how to parse the frame body, which encodings have been used etcetera.
+    The frame body holds text and other useful information, that gives detailed
+    information about the MP3 file, such as artist, title, copyright and many
+    more.
     
