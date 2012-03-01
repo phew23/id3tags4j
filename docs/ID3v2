@@ -25,16 +25,23 @@ Abstract
 
     This document was created for a better understanding of ID3v2 tags and to 
     illustrate the similiarities and differences within different subversions of
-    those.
+    those. The intension of this document is to simplify implementation of the 
+    most common ID3v2 tag protocols. Much of the provided information is 
+    originally from <http://www.id3.org/> and either rewritten or visualized 
+    with the purpose of better readability and understanding.
 
 
 
-1.      Conventions in this document
-2.      General ID3v2 tag structure
-3.      ID3v2 tag header
-  3.1.  ID3v2 tag header's flag byte
-  3.2.  ID3v2 tag extended header
-4.      ID3v2 tag body
+1.          Conventions in this document
+2.          General ID3v2 tag structure
+3.          ID3v2 tag header
+  3.1.      ID3v2 tag header flag byte
+  3.2.      ID3v2 tag extended header
+4.          ID3v2 tag body
+5.          ID3v2 frame
+  5.1.      ID3v2 frame header
+      5.1.1 ID3v2 frame header flag bytes
+  5.2.      ID3v2 frame body
 
 
 
@@ -120,7 +127,7 @@ Abstract
 
 
      
-3.1     ID3v2 tag header's flag byte
+3.1     ID3v2 tag header flag byte
 
     The table below illustrates which flags are supported in which ID3v2 tag
     version.
@@ -185,7 +192,131 @@ Abstract
     The ID3v2 tag body contains frames. Those frames in turn are split into
     a frame header and a frame body. The frame header contains information on
     how to parse the frame body, which encodings have been used etcetera.
-    The frame body holds text and other useful information, that gives detailed
-    information about the MP3 file, such as artist, title, copyright and many
-    more.
+    The frame body holds detailed encapsulated information about the MP3 file, 
+    such as artist, title, copyright and many more.
+
+
+5.      ID3v2 frames
+
+    An ID3v2 frame can be split into a header and a body.
+
+ +-----------------------------------------------------------------------------+
+ |                                 ID3v2 frame                                 |
+ +--------------------------------------+--------------------------------------+  
+ |          ID3v2 frame header          |            ID3v2 frame body          |
+ +--------------------------------------+--------------------------------------+
+
+ 
+5.1     ID3v2 frame header
+
+    identifier:
+            The frame header holds identifier bytes, those bytes each hold a
+            character that tells what type the frame is of (such as "TPE2",
+            which is a text frame).
+            For more detailed information go to <http://id3.org/>.
+               
+    size:
+            The identifier bytes are followed by a size descriptor which has
+            the size of the frame body encapsulated in it.
+
+    flag:
+            The size descriptor is followed (in ID3v2 v3.0 and later) by two 
+            flag bytes. The first byte has frame status flags encapsulated, the 
+            second byte has format flags encapsulated.
     
+
+ +-----------------------------------------------------------------------------+
+ |                              ID3v2 frame header                             |
+ +------------+--------------------------+--------------------------+----------+
+              |                          |                          |
+            v2.0                       v3.0                       v4.0 
+              |                          |                          |
+  +-----[identifier]----+    +-----[identifier]----+    +-----[identifier]----+ 
+  |       3 bytes       |    |       4 bytes       |    |       4 bytes       |
+  +---------------------+    +---------------------+    +---------------------+
+                                                                                
+  +--------[size]-------+    +--------[size]-------+    +--------[size]-------+ 
+  |       3 bytes       |    |       4 bytes       |    |       4 bytes       |
+  +---------------------+    +---------------------+    +---------------------+
+                                                                                
+                             +--------[flag]-------+    +--------[flag]-------+
+                             |       2 bytes       |    |       2 bytes       |
+                             +---------------------+    +---------------------+
+ 
+  -----------------------    -----------------------    ----------------------- 
+                = 6 bytes                 = 10 bytes                 = 10 bytes
+
+
+
+5.1.1   ID3v2 frame header flag bytes
+
+    The byte pair holding the flag bits is only available in ID3v2 v2.3.0 or
+    higher. In the following the v3.0 and v4.0 flag bytes are compared to each
+    other:
+
+
+    Lets assume the flags are written into a byte array named 'flags':
+    
+        flags[0]:
+                The flag byte that has status flags encapsulated.
+        
+        flags[1]:
+                The flag byte that has format flags encapsulated.
+      
+
+ +----------------------------------------------------------------------------+
+ |                             status flag byte                               |
+ +---------------+--------------------------------------------+---------------+
+                 |                                            |             
+               v3.0                                         v4.0
+ |msb|           |                            |msb|           |
+ +---+-----------+---------------+            +---+-----------+---------------+
+ |             bits              |            |             bits              |
+ +---+---+---+---+---+---+---+---+            +---+---+---+---+---+---+---+---+
+ | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |-bit number-| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+ +---+---+---+---+---+---+---+---+            +---+---+---+---+---+---+---+---+
+ | a | b | c | 0 | 0 | 0 | 0 | 0 |----flag----| 0 | a | b | c | 0 | 0 | 0 | 0 |
+ +---+---+---+---+---+---+---+---+            +---+---+---+---+---+---+---+---+
+
+ +-------------+--------------------------------------------------------------+
+ | status flag |                       description                            |
+ +-------------+--------------------------------------------------------------+
+ |      a      | Tag alter preservation                                       |
+ |             | This flag tells the software what to do with this frame if   | 
+ |             | it is unknown and the tag is altered in any way. This        |
+ |             | applies to all kinds of alterations, including adding more   |
+ |             | padding and reordering the frames.                           | 
+ +----------------------------------------------------------------------------+
+ |      b      | File alter preservation                                      |
+ |             | This flag tells the software what to do with this frame if   |
+ |             | it is unknown and the file, excluding the tag, is altered.   |
+ |             | This does not apply when the audio is completely replaced    |
+ |             | with other audio data.                                       |
+ +-------------+--------------------------------------------------------------+
+ |      c      | Read only                                                    |
+ |             | This flag, if set, tells the software that the contents of   |
+ |             | this frame is intended to be read only. Changing the         |
+ |             | contents might break something, e.g. a signature. If the     |
+ |             | contents are changed, without knowledge in why the frame was |
+ |             | flagged read only and without taking the proper means to     |
+ |             | compensate, e.g. recalculating the signature, the bit should |
+ |             | be cleared.                                                  |
+ +-------------+--------------------------------------------------------------+  
+
+
+
+
+
+ +----------------------------------------------------------------------------+
+ |                             format flag byte                               |
+ +---------------+--------------------------------------------+---------------+
+                 |                                            |             
+               v3.0                                         v4.0
+ |msb|           |                            |msb|           |
+ +---+-----------+---------------+            +---+-----------+---------------+
+ |             bits              |            |             bits              |
+ +---+---+---+---+---+---+---+---+            +---+---+---+---+---+---+---+---+
+ | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |-bit number-| 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+ +---+---+---+---+---+---+---+---+            +---+---+---+---+---+---+---+---+
+ | i | j | k | 0 | 0 | 0 | 0 | 0 |----flag----| 0 | h | 0 | 0 | k | m | n | p |
+ +---+---+---+---+---+---+---+---+            +---+---+---+---+---+---+---+---+
