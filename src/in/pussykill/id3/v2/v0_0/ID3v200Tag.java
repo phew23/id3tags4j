@@ -32,23 +32,23 @@ public class ID3v200Tag extends ID3v2Tag {
         super(id3v2TagHeader, id3v2TagBody);
     }
     
-    //The isUnsynchronized() method still has to be tested
+    //TODO: The isUnsynchronized() method still has to be tested
     /**
      * Tells if the {@link ID3v2Tag} is using unsynchronization or not.
      * @return true if the unsynchronized scheme bit is set; false otherwise
      */
     public boolean isUnsynchronized() {
-        return (id3v2TagHeader.getFlagsByte() & 
+        return (id3v2TagHeader.getFlagByte() & 
                 ID3v2Constants.ID3v2_UNSYNCHRONIZATION) != 0;
     }
     
-    //the isCompressed() method still has to be tested
+    //TODO: the isCompressed() method still has to be tested
     /**
      * Tells if the {@link ID3v2Tag} is using compression or not.
      * @return true if the compression bit is set; false otherwise
      */
     public boolean isCompressed() {
-        return (id3v2TagHeader.getFlagsByte() &
+        return (id3v2TagHeader.getFlagByte() &
                 ID3v2Constants.ID3v2_COMPRESSION) != 0;
     }
     
