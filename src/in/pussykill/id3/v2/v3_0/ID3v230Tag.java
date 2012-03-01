@@ -38,7 +38,7 @@ public class ID3v230Tag extends ID3v2Tag {
      * @return true if the unsynchronized scheme bit is set; false otherwise
      */
     public boolean isUnsynchronized() {
-        return (id3v2TagHeader.getFlagsByte() & 
+        return (id3v2TagHeader.getFlagByte() & 
                 ID3v2Constants.ID3v2_UNSYNCHRONIZATION) != 0;
     }
     
@@ -48,7 +48,7 @@ public class ID3v230Tag extends ID3v2Tag {
      * @return true if the extended header bit is set; false otherwise
      */
     public boolean hasExtendedHeader() {
-        return (id3v2TagHeader.getFlagsByte() &
+        return (id3v2TagHeader.getFlagByte() &
                 ID3v2Constants.ID3v2_EXTENDED_HEADER) != 0;
     }
     
@@ -58,7 +58,7 @@ public class ID3v230Tag extends ID3v2Tag {
      * @return true if the experimental indicator bit is set; false otherwise
      */
     public boolean isExperimental() {
-        return (id3v2TagHeader.getFlagsByte() &
+        return (id3v2TagHeader.getFlagByte() &
                 ID3v2Constants.ID3v2_EXPERIMENTAL_INDICATOR) != 0;
     }
     
