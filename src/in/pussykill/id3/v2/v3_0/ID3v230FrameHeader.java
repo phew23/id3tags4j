@@ -23,18 +23,48 @@ import in.pussykill.id3.v2.ID3v2FrameHeader;
  * This class represents a ID3v230FrameHeader
  * @author phew
  */
-public class ID3v230FrameHeader extends ID3v2FrameHeader {
+public class ID3v230FrameHeader extends ID3v2FrameHeader implements 
+        ID3v230FrameHeaderFlagInterface {
     
     private final byte[] id;
     protected final byte[] size;
     private final byte[] flags;
     
-    //TODO:
-    //implement flag bits methods
+    //TODO: implement flag bits methods
     public ID3v230FrameHeader(byte[] b) {
         id = new byte[] { b[0], b[1], b[2], b[3] };
         size = new byte[] { b[4], b[5], b[6], b[7] };
         flags = new byte[] { b[8], b[9] };
+    }
+
+    @Override
+    public boolean hasTagAlterPreservation() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean hasFileAlterPreservation() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isCompressed() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean isEncrypted() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    @Override
+    public boolean isGrouped() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     @Override
@@ -47,6 +77,4 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader {
         return ID3v2Converter.id3v2FrameHeaderSizeToInteger(size);
     }
 
-
-    
 }
