@@ -23,14 +23,26 @@ import in.pussykill.id3.v2.v3_0.ID3v230FrameHeader;
  * This class represents an IDv2 4.0 frame header.
  * @author phew
  */
-public class ID3v240FrameHeader extends ID3v230FrameHeader {
+public class ID3v240FrameHeader extends ID3v230FrameHeader implements 
+        ID3v240FrameHeaderFlagInterface {
     
     public ID3v240FrameHeader(byte[] b) {
         super(b);
     }
     
     @Override
+    public boolean isUnsynchronized() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean hasDataLengthIndicator() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    @Override
     public int getID3v2FrameBodyLength() {
+        //TODO:
         //the size of the body is not encapsulated as in a usual v3.0 tag,
         //it rather uses 7 bits, ignoring the MSB (which is always unset).
         //while v3.0 uses: $00 00 00 00 == 4 bytes
