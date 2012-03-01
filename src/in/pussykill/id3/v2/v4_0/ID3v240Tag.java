@@ -32,13 +32,13 @@ public class ID3v240Tag extends ID3v230Tag {
         super(id3v2TagHeader, id3v2TagBody);
     }
     
-    //The hasFooter() method still has to be tested
+    //TODO: The hasFooter() method still has to be tested
     /**
      * Tells if the {@link ID3v2Tag} contains a footer.
      * @return true if the footer bit is set; false otherwise
      */
     public boolean hasFooter() {
-        return (id3v2TagHeader.getFlagsByte() & 
+        return (id3v2TagHeader.getFlagByte() & 
                 ID3v2Constants.ID3v240_FOOTER) != 0;
     }
     
