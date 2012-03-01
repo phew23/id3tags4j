@@ -24,7 +24,7 @@ public class ID3v2TagHeader {
     
     private final byte[] id;
     private final byte[] version;
-    private final byte flags;
+    private final byte flag;
     private final byte[] size;
 
     /**
@@ -34,7 +34,7 @@ public class ID3v2TagHeader {
     public ID3v2TagHeader(final byte[] b) {
         id = new byte[] { b[0], b[1], b[2] };
         version = new byte[] { b[3], b[4] };
-        flags = new Byte(b[5]);
+        flag = new Byte(b[5]);
         size = new byte[] { b[6], b[7], b[8], b[9] };
     }
     
@@ -56,8 +56,8 @@ public class ID3v2TagHeader {
      * The flags byte's bits indicate if a flag is set or not.
      * @return The flag byte.
      */
-    public byte getFlagsByte() {
-        return flags;
+    public byte getFlagByte() {
+        return flag;
     }
     
     /**
