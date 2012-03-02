@@ -72,6 +72,20 @@ public class ID3v2Converter {
         return b;
     }
     
+    /**
+     * Does a bitwise check if the given byte's bit at pos is set.
+     * @param b - Byte to be examined.
+     * @param pos - Bit's position within the byte. 7 is the leftmost bit, 0 is
+     *              the rightmost bit.
+     * @return True if the bit is set; false otherwise.
+     */
+    public static boolean isBitSet(byte b, int pos) {
+        //a byte only has 8 bits
+        if(pos > 7 || pos < 0)
+            return false;
+        return (b & (0x01 << pos)) != 0;
+    }
+    
     public ID3v2Converter() {
         throw new AssertionError();
     }
