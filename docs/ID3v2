@@ -27,8 +27,8 @@ Abstract
     illustrate the similiarities and differences within different subversions of
     those. The intension of this document is to simplify implementation of the 
     most common ID3v2 tag protocols. Much of the provided information is 
-    originally from <http://www.id3.org/> and either rewritten or visualized 
-    with the purpose of better readability and understanding.
+    originally from <http://www.id3.org/> and either rewritten, quoted or 
+    visualized with the purpose of better readability and understanding.
 
 
 
@@ -324,12 +324,67 @@ Abstract
  +----------------------------------------------------------------------------+
  |                                format flags                                |
  +---------------+------------------------------------------------------------+
- |    version    |                      flag description                      |
+ |    version    |                                                            |
+ +-------+-------+                                                            |
+ |  3.0  |  4.0  |                      flag description                      |
+ +----[flag]-----+------------------------------------------------------------+
+ |   i   |   k   | Compression                                                |
+ |       |       | This flag indicates whether or not the frame is compressed.|
+ |       |       | A 'Data Length Indicator' byte MUST be included in the     |
+ |       |       | frame.                                                     |
+ |       |       |                                                            |
+ |       |       | This description was taken from the informal ID3 v2.4.0    |
+ |       |       | standards created by M. Nilsson. The ID3 v2.3.0 description|
+ |       |       | might slightly differ.                                     |
+ |       |       | See  <http://www.id3.org/id3v2.4.0-structure>     and      |
+ |       |       | <http://www.id3.org/id3v2.3.0> for details.                |
  +-------+-------+------------------------------------------------------------+
- | v3.0  |  v4.0 |
- +------+-------+
- |   i  |   h   |
- +------+------+
+ |   j   |   m   | Encryption                                                 |
+ |       |       | This flag indicates whether or not the frame is encrypted. |
+ |       |       | If set, one byte indicating with which method it was       |
+ |       |       | encrypted will be added to the frame. See description of   |
+ |       |       | the ENCR frame for more information about encryption method|
+ |       |       | registration. Encryption should be done after compression. |
+ |       |       | Whether or not setting this flag requires the presence of a|
+ |       |       | 'Data Length Indicator' depends on the specific algorithm  |
+ |       |       | used.                                                      |
+ |       |       |                                                            |
+ |       |       | This description was taken from the informal ID3 v2.4.0    |
+ |       |       | standards created by M. Nilsson. The ID3 v2.3.0 description|
+ |       |       | might slightly differ.                                     |
+ |       |       | See  <http://www.id3.org/id3v2.4.0-structure>     and      |
+ |       |       | <http://www.id3.org/id3v2.3.0> for details.                |
+ +-------+-------+------------------------------------------------------------+
+ |   k   |   h   | Grouping identity                                          |
+ |       |       | This flag indicates whether or not this frame belongs in a |
+ |       |       | group with other frames. If set, a group identifier byte is|
+ |       |       | added to the frame. Every frame with the same group        |
+ |       |       | identifier belongs to the same group.                      |
+ |       |       |                                                            |
+ |       |       | This description was taken from the informal ID3 v2.4.0    |
+ |       |       | standards created by M. Nilsson. The ID3 v2.3.0 description|
+ |       |       | might slightly differ.                                     |
+ |       |       | See  <http://www.id3.org/id3v2.4.0-structure>     and      |
+ |       |       | <http://www.id3.org/id3v2.3.0> for details.                |
+ +-------+-------+------------------------------------------------------------+
 
- +------+---------------------------------------------------------------------+
- |      |
+    The format flags 'n' and 'p' of version 4.0 are not available in former
+    ID3v2 versions. They are described as follows:
+ 
+ +---------------+------------------------------------------------------------+
+ |       n       | Unsynchronisation                                          |
+ |               | This flag indicates whether or not unsynchronisation was   |
+ |               | applied to this frame. See section 6 for details on        |
+ |               | unsynchronisation.                                         |
+ |               | If this flag is set all data from the end of this header to| 
+ |               | the end of this frame has been unsynchronised. Although    |  
+ |               | desirable, the presence of a 'Data Length Indicator' is not| 
+ |               | made mandatory by unsynchronisation.                       |
+ +---------------+------------------------------------------------------------+
+ |       p       | Data length indicator                                      |
+ |               | This flag indicates that a data length indicator has been  |
+ |               | added to the frame. The data length indicator is the value |
+ |               | one would write as the 'Frame length' if all of the frame  |
+ |               | format flags were zeroed, represented as a 32 bit synchsafe|
+ |               | integer.                                                   |
+ +---------------+------------------------------------------------------------+
