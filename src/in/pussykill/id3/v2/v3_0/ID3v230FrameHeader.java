@@ -16,6 +16,7 @@
  */
 package in.pussykill.id3.v2.v3_0;
 
+import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Converter;
 import in.pussykill.id3.v2.ID3v2FrameHeader;
 
@@ -28,9 +29,9 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader implements
     
     private final byte[] id;
     protected final byte[] size;
-    private final byte[] flags;
+    protected final byte[] flags;
     
-    //TODO: implement flag bits methods
+    //TODO: jdoc for flag bit methods
     public ID3v230FrameHeader(byte[] b) {
         id = new byte[] { b[0], b[1], b[2], b[3] };
         size = new byte[] { b[4], b[5], b[6], b[7] };
@@ -39,32 +40,38 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader implements
 
     @Override
     public boolean hasTagAlterPreservation() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ID3v2Converter.isBitSet(flags[0], 
+                ID3v2Constants.ID3V230_FRAME_HEADER_STATUS_FLAG_TAG_ALTER_PRESERVATION);
     }
 
     @Override
     public boolean hasFileAlterPreservation() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ID3v2Converter.isBitSet(flags[0], 
+                ID3v2Constants.ID3V230_FRAME_HEADER_STATUS_FLAG_FILE_ALTER_PRESERVATION);
     }
 
     @Override
     public boolean isReadOnly() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ID3v2Converter.isBitSet(flags[0], 
+                ID3v2Constants.ID3V230_FRAME_HEADER_STATUS_FLAG_READ_ONLY);
     }
 
     @Override
     public boolean isCompressed() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ID3v2Converter.isBitSet(flags[1], 
+                ID3v2Constants.ID3V230_FRAME_HEADER_FORMAT_FLAG_COMPRESSION);
     }
 
     @Override
     public boolean isEncrypted() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ID3v2Converter.isBitSet(flags[1], 
+                ID3v2Constants.ID3V230_FRAME_HEADER_FORMAT_FLAG_ENCRYPTION);
     }
     
     @Override
     public boolean isGrouped() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ID3v2Converter.isBitSet(flags[1], 
+                ID3v2Constants.ID3V230_FRAME_HEADER_FORMAT_FLAG_GROUPING_IDENTITY);
     }
     
     @Override
