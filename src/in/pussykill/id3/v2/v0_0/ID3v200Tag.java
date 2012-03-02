@@ -16,10 +16,7 @@
  */
 package in.pussykill.id3.v2.v0_0;
 
-import in.pussykill.id3.v2.ID3v2Constants;
-import in.pussykill.id3.v2.ID3v2Tag;
-import in.pussykill.id3.v2.ID3v2TagBody;
-import in.pussykill.id3.v2.ID3v2TagHeader;
+import in.pussykill.id3.v2.*;
 
 /**  
  * This class represents an ID3v2 2.0 tag.
@@ -32,24 +29,24 @@ public class ID3v200Tag extends ID3v2Tag {
         super(id3v2TagHeader, id3v2TagBody);
     }
     
-    //TODO: The isUnsynchronized() method still has to be tested
     /**
      * Tells if the {@link ID3v2Tag} is using unsynchronization or not.
      * @return true if the unsynchronized scheme bit is set; false otherwise
      */
     public boolean isUnsynchronized() {
-        return (id3v2TagHeader.getFlagByte() & 
-                ID3v2Constants.ID3v2_UNSYNCHRONIZATION) != 0;
+        return ID3v2Converter.isBitSet(
+                id3v2TagHeader.getFlagByte(), 
+                ID3v2Constants.ID3V200_TAG_HEADER_FLAG_UNSYNCHRONIZATION_SCHEME);
     }
     
-    //TODO: the isCompressed() method still has to be tested
     /**
      * Tells if the {@link ID3v2Tag} is using compression or not.
      * @return true if the compression bit is set; false otherwise
      */
     public boolean isCompressed() {
-        return (id3v2TagHeader.getFlagByte() &
-                ID3v2Constants.ID3v2_COMPRESSION) != 0;
+        return ID3v2Converter.isBitSet(
+                id3v2TagHeader.getFlagByte(), 
+                ID3v2Constants.ID3V200_TAG_HEADER_FLAG_COMPRESSION);
     }
     
 }
