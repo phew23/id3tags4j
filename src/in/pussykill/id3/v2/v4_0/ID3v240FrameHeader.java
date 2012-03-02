@@ -16,6 +16,7 @@
  */
 package in.pussykill.id3.v2.v4_0;
 
+import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Converter;
 import in.pussykill.id3.v2.v3_0.ID3v230FrameHeader;
 
@@ -26,18 +27,57 @@ import in.pussykill.id3.v2.v3_0.ID3v230FrameHeader;
 public class ID3v240FrameHeader extends ID3v230FrameHeader implements 
         ID3v240FrameHeaderFlagInterface {
     
+    //TODO: jdoc for flag bit methods
     public ID3v240FrameHeader(byte[] b) {
         super(b);
+    }
+
+    @Override
+    public boolean hasTagAlterPreservation() {
+        return ID3v2Converter.isBitSet(flags[0], 
+                ID3v2Constants.ID3V240_FRAME_HEADER_STATUS_FLAG_TAG_ALTER_PRESERVATION);
+    }
+
+    @Override
+    public boolean hasFileAlterPreservation() {
+        return ID3v2Converter.isBitSet(flags[0], 
+                ID3v2Constants.ID3V240_FRAME_HEADER_STATUS_FLAG_FILE_ALTER_PRESERVATION);
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return ID3v2Converter.isBitSet(flags[0], 
+                ID3v2Constants.ID3V240_FRAME_HEADER_STATUS_FLAG_READ_ONLY);
+    }
+
+    @Override
+    public boolean isCompressed() {
+        return ID3v2Converter.isBitSet(flags[1], 
+                ID3v2Constants.ID3V240_FRAME_HEADER_FORMAT_FLAG_COMPRESSION);
+    }
+
+    @Override
+    public boolean isEncrypted() {
+        return ID3v2Converter.isBitSet(flags[1], 
+                ID3v2Constants.ID3V240_FRAME_HEADER_FORMAT_FLAG_ENCRYPTION);
+    }
+    
+    @Override
+    public boolean isGrouped() {
+        return ID3v2Converter.isBitSet(flags[1], 
+                ID3v2Constants.ID3V240_FRAME_HEADER_FORMAT_FLAG_GROUPING_IDENTITY);
     }
     
     @Override
     public boolean isUnsynchronized() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ID3v2Converter.isBitSet(flags[1], 
+                ID3v2Constants.ID3V240_FRAME_HEADER_FORMAT_FLAG_UNSYNCHRONIZATION);
     }
 
     @Override
     public boolean hasDataLengthIndicator() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ID3v2Converter.isBitSet(flags[1], 
+                ID3v2Constants.ID3V240_FRAME_HEADER_FORMAT_FLAG_DATA_LENGTH_INDICATOR);
     }
     
     @Override
