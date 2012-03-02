@@ -22,42 +22,110 @@ package in.pussykill.id3.v2;
  */
 public class ID3v2Constants {
     
-        /** ID3v2 tag header length */
          public static final int ID3V2_TAG_HEADER_LENGTH = 10;
+         
+         
     
 	/*
 	 * ID3v2 minor version bytes
 	 */
 	/** ID3v2 v2.x minor version byte */
-	public static final int ID3V2_MINOR_VERSION_V2_BYTE = 0x02;
+	public static final int ID3V200_MINOR_VERSION = 0x02;
 	/** ID3v2 v3.x minor version byte */
-	public static final int ID3V2_MINOR_VERSION_V3_BYTE = 0x03;
+	public static final int ID3V230_MINOR_VERSION = 0x03;
 	/** ID3v2 v4.x minor version byte */
-	public static final int ID3V2_MINOR_VERSION_V4_BYTE = 0x04;
+	public static final int ID3V240_MINOR_VERSION = 0x04;
+        
+        
 	
 	/*
 	 * ID3v2 text encoding bytes
 	 */
-	/** ID3v2 Unicode text encoding byte */
 	public static final int ID3V2_TEXT_ENCODING_ISO_8859_1 = 0x00;
-	/** ID3v2 ISO-8859-1 text encoding byte */
 	public static final int ID3V2_TEXT_ENCODING_UNICODE = 0x01;
+        
+        
 	
 	/*
-	 * ID3v2 flag byte masks
-	 * 
-	 * check which minor version can have which flags?
+	 * ID3v2 v2.0 tag header flag byte masks
 	 */
-	public static final int ID3v2_UNSYNCHRONIZATION = 0x80;
-	public static final int ID3v2_EXTENDED_HEADER = 0x40;
-	public static final int ID3v2_EXPERIMENTAL_INDICATOR = 0x20;
-	public static final int ID3v2_COMPRESSION = 0x40;
+        public static final int 
+                ID3V200_TAG_HEADER_FLAG_UNSYNCHRONIZATION_SCHEME = 0x07;
+        public static final int ID3V200_TAG_HEADER_FLAG_COMPRESSION = 0x06;
+        
+        
+        
+        /*
+         * ID3v2 v3.0 tag header flag byte masks
+         */
+        public static final int 
+                ID3V230_TAG_HEADER_FLAG_UNSYNCHRONIZATION_SCHEME = 0x07;
+        public static final int ID3V230_TAG_HEADER_FLAG_EXTENDED_HEADER = 0x06;
+        public static final int 
+                ID3V230_TAG_HEADER_FLAG_EXPERIMENTAL_INDICATOR = 0x05;
+        
+        /*
+         * ID3v2 v3.0 frame header status flag byte masks
+         */
+        public static final int 
+                ID3V230_FRAME_HEADER_STATUS_FLAG_TAG_ALTER_PRESERVATION = 0x07;
+        public static final int
+                ID3V230_FRAME_HEADER_STATUS_FLAG_FILE_ALTER_PRESERVATION = 0x06;
+        public static final int
+                ID3V230_FRAME_HEADER_STATUS_FLAG_READ_ONLY = 0x05;
+        
+        /*
+         * ID3v2 v3.0 frame header format flag byte masks
+         */
+        public static final int
+                ID3V230_FRAME_HEADER_FORMAT_FLAG_COMPRESSION = 0x07;
+        public static final int
+                ID3V230_FRAME_HEADER_FORMAT_FLAG_ENCRYPTION = 0x06;
+        public static final int
+                ID3V230_FRAME_HEADER_FORMAT_FLAG_GROUPING_IDENTITY = 0x05;
+        
+        
+        
+        /*
+         * ID3v2 v4.0 tag header flag byte masks
+         */
+        /* We do not really need those as ID3v230 has the same values and 
+         * ID3v240Tag inherits the ID3v2TagHeader flag methods from 
+         * ID3v230Tag.
+        public static final int 
+                ID3V240_TAG_HEADER_FLAG_UNSYNCHRONIZATION_SCHEME = 0x07;
+	public static final int ID3V240_TAG_HEADER_FLAG_EXTENDED_HEADER = 0x06;
+        public static final int 
+                ID3V240_TAG_HEADER_FLAG_EXPERIMENTAL_INDICATOR = 0x05;
+        */
+        public static final int ID3V240_TAG_HEADER_FLAG_FOOTER = 0x04;
+        
+        /*
+         * ID3v2 v4.0 frame header status flag byte masks
+         */
+        public static final int 
+                ID3V240_FRAME_HEADER_STATUS_FLAG_TAG_ALTER_PRESERVATION = 0x06;
+        public static final int
+                ID3V240_FRAME_HEADER_STATUS_FLAG_FILE_ALTER_PRESERVATION = 0x05;
+        public static final int
+                ID3V240_FRAME_HEADER_STATUS_FLAG_READ_ONLY = 0x04;
+        
+        /*
+         * ID3v2 v4.0 frame header format flag byte masks
+         */
+        public static final int
+                ID3V240_FRAME_HEADER_FORMAT_FLAG_GROUPING_IDENTITY = 0x06;
+        public static final int
+                ID3V240_FRAME_HEADER_FORMAT_FLAG_COMPRESSION = 0x03;
+        public static final int
+                ID3V240_FRAME_HEADER_FORMAT_FLAG_ENCRYPTION = 0x02;
+        public static final int
+                ID3V240_FRAME_HEADER_FORMAT_FLAG_UNSYNCHRONIZATION = 0x01;
+        public static final int
+                ID3V240_FRAME_HEADER_FORMAT_FLAG_DATA_LENGTH_INDICATOR = 0x00;
+        
 	
-	/*
-	 * ID3v2 v4.0 specific byte masks
-	 */
-	public static final int ID3v240_FOOTER = 0x10;
-	
+        
 	public ID3v2Constants() {
 		throw new AssertionError();
 	}
