@@ -16,6 +16,8 @@
  */
 package in.pussykill.id3.v2;
 
+import in.pussykill.id3.v2.frames.ID3v2Frame;
+
 /**
  * This class represents all ID3v2 tag bodies.
  * @author phew
