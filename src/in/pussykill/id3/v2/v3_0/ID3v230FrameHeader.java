@@ -18,7 +18,7 @@ package in.pussykill.id3.v2.v3_0;
 
 import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Converter;
-import in.pussykill.id3.v2.ID3v2FrameHeader;
+import in.pussykill.id3.v2.frames.ID3v2FrameHeader;
 
 /**
  * This class represents a ID3v230FrameHeader
@@ -75,12 +75,12 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader implements
     }
     
     @Override
-    public String getIdentifierString() {
+    public String getIdentifier() {
         return new String(id);
     }
 
     @Override
-    public int getID3v2FrameBodyLength() {
+    public int getFrameBodyLength() {
         return ID3v2Converter.id3v2FrameHeaderSizeToInteger(size);
     }
 
