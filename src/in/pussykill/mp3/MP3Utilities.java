@@ -48,7 +48,6 @@ public class MP3Utilities {
             IOException {
         
         ID3v2TagHeader id3v2TagHeader;
-        ID3v2TagBody id3v2TagBody = null;
         ID3v2Tag id3v2Tag = null;
         
         RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
@@ -61,17 +60,63 @@ public class MP3Utilities {
         
         id3v2TagHeader = new ID3v2TagHeader(id3v2TagHeaderBytes);
         
-        if(id3v2TagHeader.getID3v2Version() == 
+        if(id3v2TagHeader.getMinorVersionByte() == 
                 ID3v2Constants.ID3V200_MINOR_VERSION)
-            id3v2Tag = new ID3v200Tag(id3v2TagHeader, id3v2TagBody);
-        else if(id3v2TagHeader.getID3v2Version() == 
+            id3v2Tag = parseID3v200Tag(id3v2TagHeader, raf);
+        else if(id3v2TagHeader.getMinorVersionByte() == 
                 ID3v2Constants.ID3V230_MINOR_VERSION)
-            id3v2Tag = new ID3v230Tag(id3v2TagHeader, id3v2TagBody);
-        else if(id3v2TagHeader.getID3v2Version() == 
+            id3v2Tag = parseID3v230Tag(id3v2TagHeader, raf);
+        else if(id3v2TagHeader.getMinorVersionByte() == 
                 ID3v2Constants.ID3V240_MINOR_VERSION)
-            id3v2Tag = new ID3v240Tag(id3v2TagHeader, id3v2TagBody);
+            id3v2Tag = parseID3v240Tag(id3v2TagHeader, raf);
         
         return new MP3File(id3v2Tag);
     }
+    
+    /**
+     * Creates a new {@link ID3v200Tag} read from the {@link MP3File}.
+     * @param id3v2TagHeader The {@link ID3v2TagHeader} of the MP3.
+     * @return A new {@link ID3v200Tag}.
+     */
+    private static ID3v200Tag parseID3v200Tag(final ID3v2TagHeader id3v2TagHeader,
+            final RandomAccessFile raf) {       
+        
+        ID3v2TagBody id3v2TagBody = null;
+        return new ID3v200Tag(id3v2TagHeader, id3v2TagBody);
+    }
+    
+    /**
+     * Creates a new {@link ID3v230Tag} read from the {@link MP3File}.
+     * @param id3v2TagHeader The {@link ID3v2TagHeader} of the MP3.
+     * @return A new {@link ID3v230Tag}.
+     *
+     * @throws IOException Is thrown when i/o errors occure reading the MP3 file.
+     */
+    private static ID3v230Tag parseID3v230Tag(final ID3v2TagHeader id3v2TagHeader, 
+            final RandomAccessFile raf) throws IOException {
+        
+        final int tagBodyLength = id3v2TagHeader.getTagBodyLength();
+        byte[] tagBodyBytes = new byte[tagBodyLength];
+        raf.read(tagBodyBytes, 0, tagBodyLength);
+        
+        //parse frames here and return tag with header, body (containing frames (header & body))
+        
+        ID3v2TagBody id3v2TagBody = null;
+        return new ID3v230Tag(id3v2TagHeader, id3v2TagBody);
+        
+    }
+    
+    /**
+     * Creates a new {@link ID3v240Tag} read from the {@link MP3File}.
+     * @param id3v2TagHeader The {@link ID3v2TagHeader} of the MP3.
+     * @return A new {@link ID3v240Tag}.
+     */
+    private static ID3v240Tag parseID3v240Tag(final ID3v2TagHeader id3v2TagHeader,
+            final RandomAccessFile raf) {
+        
+        ID3v2TagBody id3v2TagBody = null;
+        return new ID3v240Tag(id3v2TagHeader, id3v2TagBody);
+    }
+    
     
 }
