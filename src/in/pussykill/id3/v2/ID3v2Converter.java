@@ -23,6 +23,7 @@ package in.pussykill.id3.v2;
 public class ID3v2Converter {
     
     /**
+     * TODO: change this so i know what it does and its done by myself o0
      * Converts the size byte array to Integer.
      * @param b byte[] buffer containing the {@link ID3v2TagHeader}'s  four 
      *            'size'-bytes
