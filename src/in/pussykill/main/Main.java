@@ -17,9 +17,6 @@
 package in.pussykill.main;
 
 import in.pussykill.id3.v2.ID3v2Tag;
-import in.pussykill.id3.v2.ID3v2TagBody;
-import in.pussykill.id3.v2.ID3v2TagHeader;
-import in.pussykill.id3.v2.v3_0.ID3v230Tag;
 import in.pussykill.mp3.MP3File;
 import in.pussykill.mp3.MP3Utilities;
 import java.io.FileNotFoundException;
@@ -36,19 +33,8 @@ public class Main {
             
             MP3File mp3 = MP3Utilities.init("files/c.mp3");
             ID3v2Tag id3v2 = mp3.getID3v2Tag();
-            if(mp3.hasID3v230Tag()) {
-                
-                ID3v230Tag id3v230Tag = (ID3v230Tag) id3v2;
-                System.out.println(id3v230Tag.isExperimental());
-                System.out.println(id3v230Tag.isUnsynchronized());
-                System.out.println(id3v230Tag.hasExtendedHeader());
-                ID3v2TagHeader id3v2TagHeader = id3v230Tag.getID3v2TagHeader();
-                System.out.println(id3v2TagHeader.getID3v2TagBodyLength());
-                System.out.println(id3v2TagHeader.getID3v2Version());
-                System.out.println(id3v2TagHeader.getIdString());
-                ID3v2TagBody id3v2TagBody = id3v230Tag.getID3v2TagBody();
+            System.out.println(id3v2.getID3v2TagHeader().getVersion());
            
-            }
             
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
