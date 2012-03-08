@@ -29,7 +29,7 @@ public class ID3v2TagHeader {
 
     /**
      * Creates a new ID3v2TagHeader from the given byte chain.
-     * @param b - Array of bytes containing ID3v2TagHeader data.
+     * @param b Array of bytes containing ID3v2TagHeader data.
      */
     public ID3v2TagHeader(final byte[] b) {
         id = new byte[] { b[0], b[1], b[2] };
@@ -48,8 +48,26 @@ public class ID3v2TagHeader {
     /**
      * @return The minor version byte of this {@link ID3v2Tag}.
      */
-    public byte getID3v2Version() {
+    public byte getMinorVersionByte() {
         return version[0];
+    }
+    
+    /**
+     * @return The subminor version byte of this {@link ID3v2Tag}.
+     */
+    public byte getSubminorVersionByte() {
+        return version[1];
+    }
+    
+    /**
+     * @return The String representation of this {@link ID3v2Tag}'s version.
+     */
+    public String getVersion() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(version[0]);
+        sb.append(".");
+        sb.append(version[1]);
+        return sb.toString();
     }
     
     /**
@@ -64,7 +82,7 @@ public class ID3v2TagHeader {
      * @return The length of the {@link ID3v2TagBody} for this {@link ID3v2Tag},
      *         located in its header.
      */
-    public int getID3v2TagBodyLength() {
+    public int getTagBodyLength() {
         return ID3v2Converter.id3v2TagHeaderSizeToInteger(size);
     }
     
