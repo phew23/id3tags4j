@@ -92,6 +92,7 @@ public class ID3v2Constants {
         /* We do not really need those as ID3v230 has the same values and 
          * ID3v240Tag inherits the ID3v2TagHeader flag methods from 
          * ID3v230Tag.
+         * 
         public static final int 
                 ID3V240_TAG_HEADER_FLAG_UNSYNCHRONIZATION_SCHEME = 0x07;
 	public static final int ID3V240_TAG_HEADER_FLAG_EXTENDED_HEADER = 0x06;
