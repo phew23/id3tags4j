@@ -20,13 +20,20 @@ import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Tag;
 import in.pussykill.id3.v2.ID3v2TagBody;
 import in.pussykill.id3.v2.ID3v2TagHeader;
+import in.pussykill.id3.v2.frames.ID3v2Frame;
+import in.pussykill.id3.v2.frames.ID3v2FrameUtilities;
+import in.pussykill.id3.v2.frames.ID3v2TextFrameBody;
 import in.pussykill.id3.v2.v0_0.ID3v200Tag;
+import in.pussykill.id3.v2.v3_0.ID3v230FrameHeader;
 import in.pussykill.id3.v2.v3_0.ID3v230Tag;
 import in.pussykill.id3.v2.v4_0.ID3v240Tag;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class handles the creation of {@link MP3Files}.
@@ -96,14 +103,88 @@ public class MP3Utilities {
             final RandomAccessFile raf) throws IOException {
         
         final int tagBodyLength = id3v2TagHeader.getTagBodyLength();
-        byte[] tagBodyBytes = new byte[tagBodyLength];
-        raf.read(tagBodyBytes, 0, tagBodyLength);
+        byte[] tagBody = new byte[tagBodyLength];
+        raf.read(tagBody, 0, tagBodyLength);
         
-        //parse frames here and return tag with header, body (containing frames (header & body))
+        ID3v2Frame[] id3v2Frames = new ID3v2Frame[0];
+        //A ID3v2Frame has to be at least 11 bytes in size (10 header + 1 body)
+        while(tagBody.length > 10) {
+            
+            /* 
+             * copy first 10 bytes of the body into a new array, the first 10
+             * bytes of the ID3v2 tag body are the header bytes of the first
+             * ID3v2 frame.
+             */
+            byte[] frameHeader = Arrays.copyOfRange(tagBody, 0, 10);
+            ID3v230FrameHeader id3v230FrameHeader = 
+                    new ID3v230FrameHeader(frameHeader);
+          
+            //as soon as nothing else but padding is read we can stop parsing
+            if(!isID3v2Frame(id3v230FrameHeader.getIdentifier()))
+                break;
+            
+            /*
+             * print frame identifier ("TPE1", "TIT2" etc.)
+             */
+            System.out.println("Found: " + id3v230FrameHeader.getIdentifier());
+
+            //copy all bytes of the frame into one array
+            byte[] frame = Arrays.copyOfRange(tagBody, 0, 
+                    id3v230FrameHeader.getFrameBodyLength() + 10);
+            
+            //copy all the frame's body bytes into one array
+            byte[] frameBody = Arrays.copyOfRange(frame, 10, 
+                    id3v230FrameHeader.getFrameBodyLength() + 10);
+            
+            //cut the frame header off the id3v2 tag body
+            tagBody = Arrays.copyOfRange(tagBody, 
+                    //start at header length (10 bytes) + frame body length (dynamic)
+                    id3v230FrameHeader.getFrameBodyLength() + 10, 
+                    //and copy the rest of the array, excluding the first frame that
+                    //we just have parsed above:
+                    //== complete tag length - (10 bytes frame header + frame body length)
+                    (tagBody.length - 1) - (id3v230FrameHeader.getFrameBodyLength() + 10));
+            
+           if(isID3v2TextFrame(id3v230FrameHeader.getIdentifier())) {
+               ID3v2TextFrameBody id3v2TextFrameBody = ID3v2FrameUtilities.parseID3v2TextFrame(frameBody);
+               id3v2Frames = Arrays.copyOf(id3v2Frames, id3v2Frames.length + 1);
+               id3v2Frames[id3v2Frames.length - 1] = new ID3v2Frame(id3v230FrameHeader, id3v2TextFrameBody);
+           }
+            
+            
+        }
         
-        ID3v2TagBody id3v2TagBody = null;
+        ID3v2TagBody id3v2TagBody = new ID3v2TagBody(id3v2Frames);
         return new ID3v230Tag(id3v2TagHeader, id3v2TagBody);
         
+    }
+    
+    //TODO: maybe replace this with byte[0] >= 'A' && byte[0] <= Z etc. for
+    //      performance, hence REGEX is very ressource-taking.
+    /**
+     * @param identifier The identifier of the alleged frame.
+     * @return True if the identifier indicates that it actually is a frame; false otherwise.
+     */
+    private static boolean isID3v2Frame(final String identifier) {
+        Pattern frames = 
+                Pattern.compile("[A-Z][A-Z](?:[A-Z]|[0-9])|[A-Z][A-Z][A-Z](?:[A-Z]|[0-9])");
+        Matcher matcher = frames.matcher(identifier);
+        if(matcher.matches())
+            return true;
+        return false;
+    }
+    
+    /**
+     * @param identifier The identifier of the frame located in its {@link ID3v2FrameHeader}.
+     * @return True if the frame is a text frame; false otherwise.
+     */
+    private static boolean isID3v2TextFrame(final String identifier) {
+        Pattern textFrames = 
+                Pattern.compile("T(?:[A-Z](?:[A-Z]|[0-9])|[A-Z][A-Z](?:[A-Z]|[0-9]))");
+        Matcher matcher = textFrames.matcher(identifier);
+        if(matcher.matches())
+            return true;
+        return false;
     }
     
     /**
@@ -117,6 +198,8 @@ public class MP3Utilities {
         ID3v2TagBody id3v2TagBody = null;
         return new ID3v240Tag(id3v2TagHeader, id3v2TagBody);
     }
+    
+    
     
     
 }
