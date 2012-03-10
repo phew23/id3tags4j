@@ -22,12 +22,14 @@ import in.pussykill.id3.v2.ID3v2Utilities;
  * This class represents all ID3v2 text frame bodies.
  * @author phew
  */
-public class ID3v2TextFrameBody {
+public class ID3v2TextFrameBody extends ID3v2FrameBody {
     
     private final byte encoding;
     private final byte[] information;
     
-    public ID3v2TextFrameBody(final byte encoding, final byte[] information) {
+    public ID3v2TextFrameBody(final byte[] b, final byte encoding, 
+            final byte[] information) {
+        super(b);
         this.encoding = encoding;
         this.information = information;
     }
