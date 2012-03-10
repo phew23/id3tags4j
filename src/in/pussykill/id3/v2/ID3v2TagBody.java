@@ -34,7 +34,11 @@ public class ID3v2TagBody {
         this.frames = frames;
     }
     
-   
-    
+    /**
+     * @return All ID3v2 frames of this ID3v2 tag body.
+     */
+    public ID3v2Frame[] getID3v2Frames() {
+        return frames;
+    }
     
 }
