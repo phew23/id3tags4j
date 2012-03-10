@@ -20,23 +20,29 @@ package in.pussykill.id3.v2.frames;
  * This class represents all ID3v2 frames.
  * @author phew
  */
-public abstract class ID3v2Frame {
+public class ID3v2Frame {
     
     final ID3v2FrameHeader id3v2FrameHeader;
     final ID3v2FrameBody id3v2FrameBody;
     
-    public ID3v2Frame(final ID3v2FrameHeader id3v2FrameHeader, 
+    public ID3v2Frame(final ID3v2FrameHeader id3v2FrameHeader,
             final ID3v2FrameBody id3v2FrameBody) {
         this.id3v2FrameHeader = id3v2FrameHeader;
         this.id3v2FrameBody = id3v2FrameBody;
     }
+ 
+    /**
+     * @return The {@link ID3v2FrameHeader} of this frame.
+     */
+    public ID3v2FrameHeader getID3v2FrameHeader() {
+        return id3v2FrameHeader;
+    }
     
-    public abstract String getIdentifier();
-    
-    public abstract byte[] getHeaderBytes();
-    
-    public abstract byte[] getBodyBytes();
-    
-    
-    
+    /**
+     * @return The {@link ID3v2FrameBody} of this frame.
+     */
+    public ID3v2FrameBody getID3v2FrameBody() {
+        return id3v2FrameBody;
+    }
+ 
 }
