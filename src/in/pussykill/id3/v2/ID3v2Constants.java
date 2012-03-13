@@ -22,10 +22,26 @@ package in.pussykill.id3.v2;
  */
 public class ID3v2Constants {
     
-         public static final int ID3V2_TAG_HEADER_LENGTH = 10;
-         
-         
+        /*
+         * Miscellaneous constants
+         */
     
+        public static final int ID3V2_TAG_HEADER_LENGTH = 10;
+        public static final byte[] ID3V2_TEXT_SEPERATOR_ISO_8859_1 
+                = new byte[] { 0x00 };
+        public static final byte[] ID3V2_TEXT_SEPERATOR_UNICODE
+                = new byte[] { 0x00, 0x00 };
+        
+        
+                
+        /*
+	 * ID3v2 text encoding bytes
+	 */
+	public static final int ID3V2_TEXT_ENCODING_ISO_8859_1 = 0x00;
+	public static final int ID3V2_TEXT_ENCODING_UNICODE = 0x01;
+    
+        
+        
 	/*
 	 * ID3v2 minor version bytes
 	 */
@@ -35,17 +51,9 @@ public class ID3v2Constants {
 	public static final int ID3V230_MINOR_VERSION = 0x03;
 	/** ID3v2 v4.x minor version byte */
 	public static final int ID3V240_MINOR_VERSION = 0x04;
+       
         
         
-	
-	/*
-	 * ID3v2 text encoding bytes
-	 */
-	public static final int ID3V2_TEXT_ENCODING_ISO_8859_1 = 0x00;
-	public static final int ID3V2_TEXT_ENCODING_UNICODE = 0x01;
-        
-        
-	
 	/*
 	 * ID3v2 v2.0 tag header flag byte masks
 	 */
