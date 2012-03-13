@@ -20,6 +20,7 @@ import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Tag;
 import in.pussykill.id3.v2.ID3v2TagBody;
 import in.pussykill.id3.v2.ID3v2TagHeader;
+import in.pussykill.id3.v2.frames.ID3v2CommentsFrameBody;
 import in.pussykill.id3.v2.frames.ID3v2Frame;
 import in.pussykill.id3.v2.frames.ID3v2FrameUtilities;
 import in.pussykill.id3.v2.frames.ID3v2TextFrameBody;
@@ -118,37 +119,48 @@ public class MP3Utilities {
             byte[] frameHeader = Arrays.copyOfRange(tagBody, 0, 10);
             ID3v230FrameHeader id3v230FrameHeader = 
                     new ID3v230FrameHeader(frameHeader);
+            
+            int frameBodyLen = id3v230FrameHeader.getFrameBodyLength();
           
             //as soon as nothing else but padding is read we can stop parsing
             if(!isID3v2Frame(id3v230FrameHeader.getIdentifier()))
                 break;
-            
-            /*
-             * print frame identifier ("TPE1", "TIT2" etc.)
-             */
-            System.out.println("Found: " + id3v230FrameHeader.getIdentifier());
 
             //copy all bytes of the frame into one array
-            byte[] frame = Arrays.copyOfRange(tagBody, 0, 
-                    id3v230FrameHeader.getFrameBodyLength() + 10);
+            byte[] frame = Arrays.copyOfRange(tagBody, 0, frameBodyLen + 10);
             
             //copy all the frame's body bytes into one array
-            byte[] frameBody = Arrays.copyOfRange(frame, 10, 
-                    id3v230FrameHeader.getFrameBodyLength() + 10);
+            byte[] frameBody = Arrays.copyOfRange(frame, 10, frameBodyLen + 10);
             
-            //cut the frame header off the id3v2 tag body
+            //frame's length is header + body, header is always 10 bytes
+            int frameLength = 10 + frameBodyLen;
+            
+            //cut the parsed frame off the ID3v2 tag body
             tagBody = Arrays.copyOfRange(tagBody, 
                     //start at header length (10 bytes) + frame body length (dynamic)
-                    id3v230FrameHeader.getFrameBodyLength() + 10, 
-                    //and copy the rest of the array, excluding the first frame that
-                    //we just have parsed above:
-                    //== complete tag length - (10 bytes frame header + frame body length)
-                    (tagBody.length - 1) - (id3v230FrameHeader.getFrameBodyLength() + 10));
+                    frameBodyLen + 10,
+                    /*
+                     * and copy the rest of the array, excluding the first frame that
+                     * we just have parsed above:
+                     * == complete tag length - (10 bytes frame header + frame body length)
+                     */
+                    tagBody.length);
             
+            //if this frame is a text frame then parse the text frame's body
            if(isID3v2TextFrame(id3v230FrameHeader.getIdentifier())) {
-               ID3v2TextFrameBody id3v2TextFrameBody = ID3v2FrameUtilities.parseID3v2TextFrame(frameBody);
+               ID3v2TextFrameBody id3v2TextFrameBody = 
+                       ID3v2FrameUtilities.parseID3v2TextFrameBody(frameBody);
                id3v2Frames = Arrays.copyOf(id3v2Frames, id3v2Frames.length + 1);
-               id3v2Frames[id3v2Frames.length - 1] = new ID3v2Frame(id3v230FrameHeader, id3v2TextFrameBody);
+               id3v2Frames[id3v2Frames.length - 1] = 
+                       new ID3v2Frame(id3v230FrameHeader, id3v2TextFrameBody);
+           }
+           //if this frame is a COMM frame let's parse the COMM-framebody
+           else if(id3v230FrameHeader.getIdentifier().equals("COMM")) {
+               ID3v2CommentsFrameBody id3v2CommentsFrameBody = 
+                       ID3v2FrameUtilities.parseID3v2CommentsFrameBody(frameBody);
+               id3v2Frames = Arrays.copyOf(id3v2Frames, id3v2Frames.length + 1);
+               id3v2Frames[id3v2Frames.length - 1] = 
+                       new ID3v2Frame(id3v230FrameHeader, id3v2CommentsFrameBody);
            }
             
             
