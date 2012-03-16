@@ -17,10 +17,9 @@
 package in.pussykill.main;
 
 import in.pussykill.id3.v2.ID3v2Tag;
-import in.pussykill.id3.v2.frames.ID3v2CommentsFrameBody;
+import in.pussykill.id3.v2.frames.ID3v2AttachedPictureFrameBody;
 import in.pussykill.id3.v2.frames.ID3v2Frame;
-import in.pussykill.id3.v2.frames.selectors.ID3v2FrameType;
-import in.pussykill.id3.v2.frames.selectors.ID3v2FrameTypeSelector;
+import in.pussykill.id3.v2.frames.ID3v2FrameBody;
 import in.pussykill.mp3.MP3File;
 import in.pussykill.mp3.MP3Utilities;
 import java.io.File;
@@ -36,23 +35,30 @@ public class Main {
     public static void main(String... args) {
         try {
             
-            File[] mp3s = new File("files").listFiles();
-            for(File f : mp3s) {
+           File[] mp3s = new File("files").listFiles();
+           for(File f : mp3s) {
                 MP3File mp3 = MP3Utilities.init(f.getAbsolutePath());
+                if(!mp3.hasID3v2Tag())
+                    continue;
+                
                 System.out.println(f.getName() + " " + mp3.getID3v2Tag()
                         .getID3v2TagHeader().getVersion());
                 
                 ID3v2Tag id3v2Tag = mp3.getID3v2Tag();
-                ID3v2Frame[] id3v2Frames = id3v2Tag.getID3v2TagBody()
-                        .getID3v2Frames(new ID3v2FrameTypeSelector(
-                        ID3v2FrameType.COMM));
-                for(ID3v2Frame id3v2Frame : id3v2Frames) {
-                    ID3v2CommentsFrameBody body = 
-                            (ID3v2CommentsFrameBody) id3v2Frame.getID3v2FrameBody();
-                    System.out.println(body);
+                ID3v2Frame[] id3v2Frames = id3v2Tag.getID3v2TagBody().getID3v2Frames();
+                int count = 0;
+                for(ID3v2Frame frame : id3v2Frames) {
+                    count++;
+                    ID3v2FrameBody body = frame.getID3v2FrameBody();
+                    if(body instanceof ID3v2AttachedPictureFrameBody) {
+                        ID3v2AttachedPictureFrameBody apicBody = 
+                                (ID3v2AttachedPictureFrameBody) body;
+                        System.out.println(apicBody);
+                        //apicBody.savePictureTo("C:\\", count + "yo");
+                    }
                 }
                 
-            }
+           }
             
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
