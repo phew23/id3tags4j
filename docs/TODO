@@ -1,7 +1,7 @@
 DONE:
     - basic project layout
     - reading ID3v2 v3.0 frames (text frames, comments frames, attached picture
-      frames
+      frames)
 
 TODO:
     - writing frames
