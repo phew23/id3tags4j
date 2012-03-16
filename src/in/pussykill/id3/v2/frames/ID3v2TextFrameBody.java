@@ -16,6 +16,7 @@
  */
 package in.pussykill.id3.v2.frames;
 
+import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Utilities;
 
 /**
@@ -35,10 +36,31 @@ public class ID3v2TextFrameBody extends ID3v2FrameBody {
     }
     
     /**
+     * @return The charset the body's text is encoded with.
+     */
+    public String getEncoding() {
+        switch(encoding) 
+        {
+            case ID3v2Constants.ID3V2_TEXT_ENCODING_ISO_8859_1:
+                return "ISO-8859-1";
+            case ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE:
+                return "Unicode";
+            default:
+                return "ISO-8859-1";
+        }
+    }
+    
+    /**
      * @return The text read from this ID3v2 text frame body.
      */
     public String getText() {
         return ID3v2Utilities.getString(information, encoding);
+    }
+    
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "=[encoding=" + getEncoding() +
+                ", text=" + getText() + "]";
     }
     
 }
