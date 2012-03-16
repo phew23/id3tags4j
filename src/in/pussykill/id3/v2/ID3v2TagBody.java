@@ -90,6 +90,23 @@ public class ID3v2TagBody {
         }
         return id3v2Frames;
     }
-    
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\t");
+        sb.append(this.getClass().getSimpleName());
+        sb.append("=[\n");
+        for(int i = 0; i < frames.length; i++) {
+            sb.append("\t\t");
+            sb.append(frames[i]);
+            if(i < frames.length - 1)
+                sb.append(",\n");
+            else
+                sb.append("\n");
+        }
+        sb.append("\t]");
+        return sb.toString();
+    }
     
 }
