@@ -84,8 +84,8 @@ public class ID3v2TagHeader {
     
     @Override
     public String toString() {
-        return "\t" + getClass().getSimpleName() + "=[identifier=" + getIdentifier() + 
-                ", version=" + version[0] + "." + version[1] + 
+        return "\t" + getClass().getSimpleName() + "=[identifier=" + 
+                getIdentifier() + ", version=" + version[0] + "." + version[1] + 
                 ", tagBodyLength=" + getTagBodyLength() + "]";
     }
     
