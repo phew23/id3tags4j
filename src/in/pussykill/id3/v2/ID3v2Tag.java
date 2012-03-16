@@ -50,4 +50,10 @@ public abstract class ID3v2Tag {
         return id3v2TagBody;
     }
     
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "=[\n" + id3v2TagHeader +
+                ",\n" + id3v2TagBody +"\n]";
+    }
+    
 }
