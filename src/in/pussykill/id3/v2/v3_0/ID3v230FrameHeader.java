@@ -83,5 +83,16 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader implements
     public int getFrameBodyLength() {
         return ID3v2Converter.id3v2FrameHeaderSizeToInteger(size);
     }
+    
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "=[identifier=" + 
+                getIdentifier() + ", frameBodyLength=" + getFrameBodyLength() + 
+                ", tagAlterPreservation=" + hasTagAlterPreservation() + 
+                ", fileAlterPreservation=" + hasFileAlterPreservation() + 
+                ", readOnly=" + isReadOnly() + ", compressed=" + isCompressed() 
+                + ", encrypted=" + isEncrypted() + ", grouped=" + isGrouped() 
+                + "]";
+    }
 
 }
