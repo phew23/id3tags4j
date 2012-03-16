@@ -36,12 +36,17 @@ public class ID3v2FrameUtilities {
         return new ID3v2TextFrameBody(b, encoding, information);
     }
     
-    
+    /**
+     * This method parses the "COMM" frame body.
+     * @param b The "COMM" frame's body byte[].
+     * @return {@link ID3v2CommentsFrameBody} object created from the given 
+     *         byte[].
+     */
     public static ID3v2CommentsFrameBody parseID3v2CommentsFrameBody(
             final byte[] b) {
-        byte[] body = Arrays.copyOfRange(b, 4, b.length);
-        byte encoding = b[0];
-        byte[] language = new byte[] { b[1], b[2], b[3] };
+        final byte[] body = Arrays.copyOfRange(b, 4, b.length);
+        final byte encoding = b[0];
+        final byte[] language = new byte[] { b[1], b[2], b[3] };
         byte[] description = new byte[0];
         byte[] text = new byte[0];
         
@@ -51,30 +56,27 @@ public class ID3v2FrameUtilities {
          *                Unicode: 0x00 0x00
          * ID3v2CommentsFrameBody: <encoding><desc><seperator><text>
          */
-        byte[] seperator;
-        //ISO-8859-1
-        if(encoding == ID3v2Constants.ID3V2_TEXT_ENCODING_ISO_8859_1)
-            seperator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_ISO_8859_1;
+        //ID3v2 v3.0 only has ISO-8859-1 and Unicode encodings in frames;
+        //ISO-8859-1 (by default)
+        byte[] separator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_ISO_8859_1;
         //Unicode
-        else if(encoding == ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE)
-            seperator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_UNICODE;
-        //default (should be ISO-8859-1)
-        else
-            seperator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_ISO_8859_1;
+        if(encoding == ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE)
+            separator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_UNICODE;
+
         
         //search the position of $00 (00) within the byte array
-        int seperatorPos = search(body, seperator);
+        int separatorPos = search(body, separator);
         
         //<desc>0x00<text>
-        if(seperatorPos > 0) {
-            description = Arrays.copyOfRange(body, 0, seperatorPos - 1);
+        if(separatorPos > 0) {
+            description = Arrays.copyOfRange(body, 0, separatorPos - 1);
             text = Arrays.copyOfRange(body, 
-                    seperatorPos + seperator.length, body.length);
+                    separatorPos + separator.length, body.length);
         }
         //0x00<text>
-        else if(seperatorPos == 0) {
+        else if(separatorPos == 0) {
             text = Arrays.copyOfRange(body, 
-                    seperatorPos + seperator.length, body.length);
+                    separatorPos + separator.length, body.length);
         }
         //<description> (no seperator found, -1)
         else {
@@ -83,6 +85,52 @@ public class ID3v2FrameUtilities {
         
         return new ID3v2CommentsFrameBody(b, encoding, language, description,
                 text);
+    }
+    
+    /**
+     * This method parses the "APIC" frame body.
+     * @param b The "APIC" frame's body byte[].
+     * @return A new {@link ID3v2AttachedPictureFrameBody} created from the 
+     *         given byte[].
+     * 
+     * Text encoding      $xx
+     * MIME type          <text string> $00
+     * Picture type       $xx
+     * Description        <text string according to encoding> $00 (00)
+     * Picture data       <binary data>
+     */
+    public static ID3v2AttachedPictureFrameBody 
+            parseID3v2AttachedPictureFrameBody(final byte[] b) {
+        final byte encoding = b[0];
+        byte[] leftover = Arrays.copyOfRange(b, 1, b.length);
+  
+        final int mimeSeparatorPos = 
+                search(leftover, ID3v2Constants.ID3V2_SINGLE_SEPERATOR);
+        
+        byte[] mimeType = new byte[0];
+        
+        if(mimeSeparatorPos > 0)
+            mimeType = Arrays.copyOfRange(leftover, 0, mimeSeparatorPos);
+        
+        leftover = Arrays.copyOfRange(leftover, mimeSeparatorPos + 1, 
+                leftover.length - mimeType.length);
+                
+        byte pictureType = leftover[0];
+
+        leftover = Arrays.copyOfRange(leftover, 1, leftover.length);
+        
+        byte[] separator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_ISO_8859_1;
+        if(encoding == ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE)
+            separator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_UNICODE;
+        
+        int separatorPos = search(leftover, separator);
+
+        byte[] description = Arrays.copyOfRange(leftover, 0, separatorPos);
+        byte[] pictureData = Arrays.copyOfRange(leftover, 
+                separatorPos + separator.length, leftover.length);
+        
+        return new ID3v2AttachedPictureFrameBody(b, encoding, mimeType, 
+                pictureType, description, pictureData);
     }
 
     
@@ -115,7 +163,7 @@ public class ID3v2FrameUtilities {
         int[] failure = new int[pattern.length];
         int j = 0;
         for (int i = 1; i < pattern.length; i++) {
-            while (j>0 && pattern[j] != pattern[i])
+            while (j > 0 && pattern[j] != pattern[i])
                 j = failure[j - 1];
             if (pattern[j] == pattern[i])
                 j++;
