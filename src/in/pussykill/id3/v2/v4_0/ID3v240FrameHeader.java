@@ -95,4 +95,16 @@ public class ID3v240FrameHeader extends ID3v230FrameHeader implements
         return ID3v2Converter.id3v2TagHeaderSizeToInteger(size);
     }
     
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "=[identifier=" + 
+                getIdentifier() + ", frameBodyLength=" + getFrameBodyLength() + 
+                ", tagAlterPreservation=" + hasTagAlterPreservation() + 
+                ", fileAlterPreservation=" + hasFileAlterPreservation() + 
+                ", readOnly=" + isReadOnly() + ", compressed=" + isCompressed() 
+                + ", encrypted=" + isEncrypted() + ", grouped=" + isGrouped() 
+                + ", unsynchronized=" + isUnsynchronized() + 
+                ", dataLengthIndicator=" + hasDataLengthIndicator() + "]";
+    }
+    
 }
