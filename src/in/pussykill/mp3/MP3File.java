@@ -45,7 +45,7 @@ public class MP3File {
     }
     
     /**
-     * @return true if this MP3File has an {@link ID3v2Tag}; false otherwise
+     * @return True if this MP3File has an {@link ID3v2Tag}; false otherwise;
      */
     public boolean hasID3v2Tag() {
         return id3v2Tag != null;
@@ -59,14 +59,14 @@ public class MP3File {
     }
     
     /**
-     * @return true if this MP3File has an {@link ID3v230Tag}; false otherwise
+     * @return True if this MP3File has an {@link ID3v230Tag}; false otherwise;
      */
     public boolean hasID3v230Tag() {
         return id3v2Tag instanceof ID3v230Tag;
     }
     
     /**
-     * @return true if this MP3File has an {@link ID3v240Tag}; false otherwise
+     * @return True if this MP3File has an {@link ID3v240Tag}; false otherwise.
      */
     public boolean hasID3v240Tag() {
         return id3v2Tag instanceof ID3v240Tag;
