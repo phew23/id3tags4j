@@ -25,8 +25,8 @@ public class ID3v2Constants {
         /*
          * Miscellaneous constants
          */
-    
         public static final int ID3V2_TAG_HEADER_LENGTH = 10;
+        public static final byte[] ID3V2_SINGLE_SEPERATOR = new byte[] { 0x00 };
         public static final byte[] ID3V2_TEXT_SEPERATOR_ISO_8859_1 
                 = new byte[] { 0x00 };
         public static final byte[] ID3V2_TEXT_SEPERATOR_UNICODE
