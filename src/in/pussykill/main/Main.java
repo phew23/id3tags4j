@@ -17,7 +17,6 @@
 package in.pussykill.main;
 
 import in.pussykill.id3.v2.ID3v2Tag;
-import in.pussykill.id3.v2.frames.*;
 import in.pussykill.mp3.MP3File;
 import in.pussykill.mp3.MP3Utilities;
 import java.io.File;
@@ -42,6 +41,7 @@ public class Main {
                 ID3v2Tag id3v2Tag = mp3.getID3v2Tag();
                 System.out.println(id3v2Tag);
                 System.out.println();
+                
            }
             
         } catch (FileNotFoundException ex) {
