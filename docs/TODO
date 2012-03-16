@@ -1,0 +1,14 @@
+DONE:
+    - basic project layout
+    - reading ID3v2 v3.0 frames (text frames, comments frames, attached picture
+      frames
+
+TODO:
+    - writing frames
+    - dealing with padding
+    - dealing with footer
+    - finding an ID3v2Tag that does not start at byte[0] of the file data
+    - reading ID3v2 v2.0 and v4.0 frames
+
+TODO (less important):
+    - reading/calculating other useful information, such as BITRATE
