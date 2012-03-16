@@ -9,6 +9,7 @@ TODO:
     - dealing with footer
     - finding an ID3v2Tag that does not start at byte[0] of the file data
     - reading ID3v2 v2.0 and v4.0 frames
+    - detailled JavaDoc
 
 TODO (less important):
     - reading/calculating other useful information, such as BITRATE
