@@ -24,7 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- *
+ * This class represents all ID3v2 "APIC" frame bodies.
  * @author phew
  */
 public class ID3v2AttachedPictureFrameBody extends ID3v2FrameBody {
