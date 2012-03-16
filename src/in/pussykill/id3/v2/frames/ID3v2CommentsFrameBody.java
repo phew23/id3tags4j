@@ -16,6 +16,7 @@
  */
 package in.pussykill.id3.v2.frames;
 
+import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Utilities;
 
 /**
@@ -36,6 +37,21 @@ public class ID3v2CommentsFrameBody extends ID3v2FrameBody {
         this.language = language;
         this.description = description;
         this.text = text;
+    }
+    
+    /**
+     * @return The charset the body's text is encoded with.
+     */
+    public String getEncoding() {
+        switch(encoding) 
+        {
+            case ID3v2Constants.ID3V2_TEXT_ENCODING_ISO_8859_1:
+                return "ISO-8859-1";
+            case ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE:
+                return "Unicode";
+            default:
+                return "ISO-8859-1";
+        }
     }
     
     /**
@@ -61,8 +77,9 @@ public class ID3v2CommentsFrameBody extends ID3v2FrameBody {
     
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "=[language=" + getLanguage() + ", " +
-                "description=" + getDescription() + ", text=" + getText() + "]";
+        return this.getClass().getSimpleName() + "=[encoding=" + getEncoding() + 
+                ", language=" + getLanguage() + ", description=" + 
+                getDescription() + ", text=" + getText() + "]";
     }
     
 }
