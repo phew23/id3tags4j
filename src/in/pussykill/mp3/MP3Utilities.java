@@ -65,13 +65,13 @@ public class MP3Utilities {
         
         id3v2TagHeader = new ID3v2TagHeader(id3v2TagHeaderBytes);
         
-        if(id3v2TagHeader.getMinorVersionByte() == 
+        if(id3v2TagHeader.getMinorVersion() == 
                 ID3v2Constants.ID3V200_MINOR_VERSION)
             id3v2Tag = parseID3v200Tag(id3v2TagHeader, raf);
-        else if(id3v2TagHeader.getMinorVersionByte() == 
+        else if(id3v2TagHeader.getMinorVersion() == 
                 ID3v2Constants.ID3V230_MINOR_VERSION)
             id3v2Tag = parseID3v230Tag(id3v2TagHeader, raf);
-        else if(id3v2TagHeader.getMinorVersionByte() == 
+        else if(id3v2TagHeader.getMinorVersion() == 
                 ID3v2Constants.ID3V240_MINOR_VERSION)
             id3v2Tag = parseID3v240Tag(id3v2TagHeader, raf);
         
