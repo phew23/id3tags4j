@@ -20,10 +20,7 @@ import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Tag;
 import in.pussykill.id3.v2.ID3v2TagBody;
 import in.pussykill.id3.v2.ID3v2TagHeader;
-import in.pussykill.id3.v2.frames.ID3v2CommentsFrameBody;
-import in.pussykill.id3.v2.frames.ID3v2Frame;
-import in.pussykill.id3.v2.frames.ID3v2FrameUtilities;
-import in.pussykill.id3.v2.frames.ID3v2TextFrameBody;
+import in.pussykill.id3.v2.frames.*;
 import in.pussykill.id3.v2.v0_0.ID3v200Tag;
 import in.pussykill.id3.v2.v3_0.ID3v230FrameHeader;
 import in.pussykill.id3.v2.v3_0.ID3v230Tag;
@@ -88,7 +85,7 @@ public class MP3Utilities {
      */
     private static ID3v200Tag parseID3v200Tag(final ID3v2TagHeader id3v2TagHeader,
             final RandomAccessFile raf) {       
-        
+        //TODO: to be implemented
         ID3v2TagBody id3v2TagBody = null;
         return new ID3v200Tag(id3v2TagHeader, id3v2TagBody);
     }
@@ -146,29 +143,38 @@ public class MP3Utilities {
                      */
                     tagBody.length);
             
+            String identifier = id3v230FrameHeader.getIdentifier();
+            ID3v2Frame id3v2Frame = null;
             //if this frame is a text frame then parse the text frame's body
-           if(isID3v2TextFrame(id3v230FrameHeader.getIdentifier())) {
-               ID3v2TextFrameBody id3v2TextFrameBody = 
+           if(isID3v2TextFrame(identifier)) {
+                ID3v2TextFrameBody id3v2TextFrameBody = 
                        ID3v2FrameUtilities.parseID3v2TextFrameBody(frameBody);
-               id3v2Frames = Arrays.copyOf(id3v2Frames, id3v2Frames.length + 1);
-               id3v2Frames[id3v2Frames.length - 1] = 
-                       new ID3v2Frame(id3v230FrameHeader, id3v2TextFrameBody);
+                id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
+                       id3v2TextFrameBody);
            }
            //if this frame is a COMM frame let's parse the COMM-framebody
-           else if(id3v230FrameHeader.getIdentifier().equals("COMM")) {
-               ID3v2CommentsFrameBody id3v2CommentsFrameBody = 
+           else if(identifier.equals("COMM")) {
+                ID3v2CommentsFrameBody id3v2CommentsFrameBody = 
                        ID3v2FrameUtilities.parseID3v2CommentsFrameBody(frameBody);
-               id3v2Frames = Arrays.copyOf(id3v2Frames, id3v2Frames.length + 1);
-               id3v2Frames[id3v2Frames.length - 1] = 
-                       new ID3v2Frame(id3v230FrameHeader, id3v2CommentsFrameBody);
+                id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
+                       id3v2CommentsFrameBody);
            }
-            
-            
+           //if this frame is an APIC frame let's parse the APIC-framebody
+           else if(identifier.equals("APIC")) {
+                ID3v2AttachedPictureFrameBody id3v2AttachedPictureFrameBody =
+                       ID3v2FrameUtilities.parseID3v2AttachedPictureFrameBody(frameBody);
+                id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
+                       id3v2AttachedPictureFrameBody);
+           }
+           
+           if(id3v2Frame != null) {
+                id3v2Frames = Arrays.copyOf(id3v2Frames, id3v2Frames.length + 1);
+                id3v2Frames[id3v2Frames.length - 1] = id3v2Frame;
+           }
         }
         
         ID3v2TagBody id3v2TagBody = new ID3v2TagBody(id3v2Frames);
         return new ID3v230Tag(id3v2TagHeader, id3v2TagBody);
-        
     }
     
     //TODO: maybe replace this with byte[0] >= 'A' && byte[0] <= Z etc. for
