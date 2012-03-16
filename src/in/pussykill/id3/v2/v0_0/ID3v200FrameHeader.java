@@ -43,4 +43,11 @@ public class ID3v200FrameHeader extends ID3v2FrameHeader {
         return ID3v2Converter.id3v2FrameHeaderSizeToInteger(size);
     }
     
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "=[identifier=" + 
+                getIdentifier() + ", frameBodyLength=" + getFrameBodyLength() +
+                "]";
+    }
+    
 }
