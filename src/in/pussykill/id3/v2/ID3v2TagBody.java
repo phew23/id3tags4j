@@ -18,6 +18,7 @@ package in.pussykill.id3.v2;
 
 import in.pussykill.id3.v2.frames.ID3v2Frame;
 import in.pussykill.id3.v2.frames.selectors.ID3v2FrameSelector;
+import in.pussykill.id3.v2.frames.selectors.ID3v2Frames;
 import java.util.Arrays;
 
 /**
@@ -39,7 +40,7 @@ public class ID3v2TagBody {
     /**
      * @return All ID3v2 frames of this ID3v2 tag body.
      */
-    public ID3v2Frame[] getID3v2Frames() {
+    public ID3v2Frame[] getFrames() {
         return frames;
     }
     
@@ -48,7 +49,7 @@ public class ID3v2TagBody {
      *                 ID3v2 tag body.
      * @return All frames matching the {@link ID3v2FrameSelector}'s criterias.
      */
-    public ID3v2Frame[] getID3v2Frames(ID3v2FrameSelector selector) {
+    public ID3v2Frame[] getFramesBySelector(ID3v2FrameSelector selector) {
         ID3v2Frame[] selectedFrames = new ID3v2Frame[0];
         for(ID3v2Frame frame : frames) {
             if(selector.wants(frame)) {
@@ -61,13 +62,14 @@ public class ID3v2TagBody {
     }
     
     /**
-     * @param identifier Identifier of the wanted {@link ID3v2Frame}.
-     * @return The first {@link ID3v2Frame} found matching the identifier;
-     *         null if no frame matches the identifier.
+     * @param frameType - {@link ID3v2Frames} member to be collected.
+     * @return The first {@link ID3v2Frame} of the specified type found within
+     *         the ID3v2TagBody.
      */
-    public ID3v2Frame getID3v2FrameByIdentifier(String identifier) {
+    public ID3v2Frame getFrameByType(ID3v2Frames frameType) {
         for(ID3v2Frame frame : frames) {
-            if(frame.getID3v2FrameHeader().getIdentifier().equals(identifier)) {
+            if(frame.getID3v2FrameHeader().getIdentifier()
+                    .equals(String.valueOf(frameType))) {
                 return frame;
             }
         }
@@ -75,14 +77,14 @@ public class ID3v2TagBody {
     }
     
     /**
-     * @param identifier Identifier of the wanted {@link ID3v2Frame}s.
-     * @return An {@link ID3v2Frame}[] of all frames matching against the
-     *         identifier.
+     * @param frameType - {@link ID3v2Frames} member to be collected.
+     * @return {@link ID3v2Frame}[] containing all frames of the wanted type.
      */
-    public ID3v2Frame[] getID3v2FramesByIdentifier(String identifier) {
+    public ID3v2Frame[] getFramesByType(ID3v2Frames frameType) {
         ID3v2Frame[] id3v2Frames = new ID3v2Frame[0];
         for(ID3v2Frame frame : frames) {
-            if(frame.getID3v2FrameHeader().getIdentifier().equals(identifier)) {
+            if(frame.getID3v2FrameHeader().getIdentifier()
+                    .equals(String.valueOf(frameType))) {
                 id3v2Frames = Arrays.copyOf(id3v2Frames, 
                         id3v2Frames.length + 1);
                 id3v2Frames[id3v2Frames.length - 1] = frame;
