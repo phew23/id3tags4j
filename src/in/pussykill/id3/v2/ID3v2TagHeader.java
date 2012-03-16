@@ -41,21 +41,21 @@ public class ID3v2TagHeader {
     /**
      * @return The identifier as String object.
      */
-    public String getIdString() {
+    public String getIdentifier() {
         return new String(id);
     }
     
     /**
      * @return The minor version byte of this {@link ID3v2Tag}.
      */
-    public byte getMinorVersionByte() {
+    public byte getMinorVersion() {
         return version[0];
     }
     
     /**
      * @return The subminor version byte of this {@link ID3v2Tag}.
      */
-    public byte getSubminorVersionByte() {
+    public byte getSubminorVersion() {
         return version[1];
     }
     
@@ -63,11 +63,7 @@ public class ID3v2TagHeader {
      * @return The String representation of this {@link ID3v2Tag}'s version.
      */
     public String getVersion() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(version[0]);
-        sb.append(".");
-        sb.append(version[1]);
-        return sb.toString();
+        return version[0] + "." + version[1];
     }
     
     /**
@@ -88,8 +84,9 @@ public class ID3v2TagHeader {
     
     @Override
     public String toString() {
-        return getClass().getName() + "=[id=" + id[0] + id[1] + id[2] + 
-                ", version=" + version[0] + "." + version[1] + "]";
+        return "\t" + getClass().getSimpleName() + "=[identifier=" + getIdentifier() + 
+                ", version=" + version[0] + "." + version[1] + 
+                ", tagBodyLength=" + getTagBodyLength() + "]";
     }
     
 }
