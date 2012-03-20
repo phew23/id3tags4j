@@ -84,6 +84,13 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader implements
         return ID3v2Converter.id3v2FrameHeaderSizeToInteger(size);
     }
     
+    /**
+     * @return The length of the v3.0 frame header.
+     */
+    public int length() {
+        return ID3v2Constants.ID3V230_FRAME_HEADER_LENGTH;
+    }
+    
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "=[identifier=" + 
