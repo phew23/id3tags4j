@@ -68,8 +68,8 @@ public class ID3v2Frame {
     
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "=[" + id3v2FrameHeader + ", " + 
-                id3v2FrameBody + "]";
+        return this.getClass().getSimpleName() + "=[" + id3v2FrameHeader + ", " 
+                + id3v2FrameBody + "]";
     }
     
 }
