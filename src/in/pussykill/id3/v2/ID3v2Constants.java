@@ -31,8 +31,11 @@ public class ID3v2Constants {
                 = new byte[] { 0x00 };
         public static final byte[] ID3V2_TEXT_SEPERATOR_UNICODE
                 = new byte[] { 0x00, 0x00 };
-        
-        
+        public static final int ID3V200_FRAME_HEADER_LENGTH = 6;
+        public static final int ID3V230_FRAME_HEADER_LENGTH = 10;
+        //we do not need this as the v4.0 frame header class inherits the method
+        //from the v3.0 class and both versions have static header size of 10.
+        //public static final int ID3V240_FRAME_HEADER_LENGTH = 10;
                 
         /*
 	 * ID3v2 text encoding bytes
