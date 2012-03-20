@@ -64,7 +64,7 @@ public class ID3v2TagBody {
      */
     public ID3v2Frame getFrameByType(ID3v2Frames frameType) {
         for(ID3v2Frame frame : frames) {
-            if(frame.getID3v2FrameHeader().getIdentifier()
+            if(frame.getFrameHeader().getIdentifier()
                     .equals(String.valueOf(frameType))) {
                 return frame;
             }
@@ -79,7 +79,7 @@ public class ID3v2TagBody {
     public ID3v2Frame[] getFramesByType(ID3v2Frames frameType) {
         ID3v2Frame[] id3v2Frames = new ID3v2Frame[0];
         for(ID3v2Frame frame : frames) {
-            if(frame.getID3v2FrameHeader().getIdentifier()
+            if(frame.getFrameHeader().getIdentifier()
                     .equals(String.valueOf(frameType))) {
                 id3v2Frames = Arrays.copyOf(id3v2Frames, 
                         id3v2Frames.length + 1);
