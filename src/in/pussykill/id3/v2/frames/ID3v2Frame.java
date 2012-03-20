@@ -16,6 +16,10 @@
  */
 package in.pussykill.id3.v2.frames;
 
+import in.pussykill.id3.v2.v0_0.ID3v200FrameHeader;
+import in.pussykill.id3.v2.v3_0.ID3v230FrameHeader;
+import in.pussykill.id3.v2.v4_0.ID3v240FrameHeader;
+
 /**
  * This class represents all ID3v2 frames.
  * @author phew
@@ -45,6 +49,23 @@ public class ID3v2Frame {
         return id3v2FrameBody;
     }
  
+    /**
+     * @return The length of the whole frame (the sum of the header and body) or
+     *         -1 if the length could not be retrieved.
+     */
+    public int length() {
+        if(id3v2FrameHeader instanceof ID3v200FrameHeader)
+            return ((ID3v200FrameHeader) id3v2FrameHeader).length() + 
+                id3v2FrameBody.length();
+        else if(id3v2FrameHeader instanceof ID3v230FrameHeader) 
+            return ((ID3v230FrameHeader) id3v2FrameHeader).length() + 
+                id3v2FrameBody.length();
+        else if(id3v2FrameHeader instanceof ID3v240FrameHeader)
+            return ((ID3v240FrameHeader) id3v2FrameHeader).length() + 
+                    id3v2FrameBody.length();
+        return -1;
+    }
+    
     @Override
     public String toString() {
         return this.getClass().getSimpleName() + "=[" + id3v2FrameHeader + ", " + 
