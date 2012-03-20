@@ -21,6 +21,145 @@ package in.pussykill.id3.v2.frames.selectors;
  * @author phew
  */
 public enum ID3v2Frames {
+    /*
+     * v2.0
+     */
+    
+    /** recommended buffer size */
+    BUF, 
+    /** play counter */
+    CNT,
+    /** comments */
+    COM,
+    /** audio encryption */
+    CRA,
+    /** encrypted meta frame */
+    CRM,
+    /** event timing codes */
+    ETC,
+    /** equalization */
+    EQU,
+    /** general encapsulated object */
+    GEO,
+    /** involved people list */
+    IPL,
+    /** linked information */
+    LNK,
+    /** music CD identifier */
+    MCI,
+    /** MPEG location lookup table */
+    MLL,
+    /** attached picture */
+    PIC,
+    /** popularimeter */
+    POP,
+    /** reverb */
+    REV,
+    /** relative volume adjustment */
+    RVA,
+    /** synchronized lyric/text */
+    SLT,
+    /** synced tempo codes */
+    STC,
+    /** album/movie/show title */
+    TAL,
+    /** BPM (beats per minute) */
+    TBP,
+    /** composer */
+    TCM,
+    /** content type */
+    TCO,
+    /** copyright message */
+    TCR,
+    /** date */
+    TDA,
+    /** playlist delay */
+    TDY,
+    /** encoded by */
+    TEN,
+    /** file type */
+    TFT,
+    /** time */
+    TIM,
+    /** initial key */
+    TKE,
+    /** language(s) */
+    TLA,
+    /** length */
+    TLE,
+    /** media type */
+    TMT,
+    /** original artist(s)/performer(s) */
+    TOA,
+    /** original filename */
+    TOF,
+    /** original lyricist(s)/text writer(s) */
+    TOL,
+    /** original release year */
+    TOR,
+    /** original album/movie/show title */
+    TOT,
+    /** lead artist(s)/lead performer(s)/soloist(s)/performing group */
+    TP1,
+    /** band/orchestra/accompaniment */
+    TP2,
+    /** conductor/performer refinement */
+    TP3,
+    /** interpreted, remived or otherwise midified by */
+    TP4,
+    /** part of a set */
+    TPA,
+    /** publisher */
+    TPB,
+    /** ISRC (international standard recording code) */
+    TRC,
+    /** recording dates */
+    TRD,
+    /** track number/position in set */
+    TRK,
+    /** size */
+    TSI,
+    /** software/hardware and settings used for encoding */
+    TSS,
+    /** content group description */
+    TT1,
+    /** title/songname/content description */
+    TT2,
+    /** subtitle/description refinement */
+    TT3,
+    /** lyricist/text writer */
+    TXT,
+    /** user defined text information frame */
+    TXX,
+    /** year */
+    TYE,
+    /** unique file identifier */
+    UFI,
+    /** unsynchronized lyric/text transcription */
+    ULT,
+    /** official audio file webpage */
+    WAF,
+    /** official artist/performer webpage */
+    WAR,
+    /** official audio source webpage */
+    WAS,
+    /** commercial information */
+    WCM,
+    /** copyright/legal information */
+    WCP,
+    /** publishers official webpage */
+    WPB,
+    /** user defined URL link frame */
+    WXX,
+
+
+    
+    
+
+    /*
+     * v3.0/v4.0 
+     */
+    
     /** audio encryption */
     AENC,
     /** attached picture */
@@ -169,6 +308,19 @@ public enum ID3v2Frames {
     WPUB,
     /** user defined URL link frame */
     WXXX
-//TODO: the above is all id3v2 v3.0 stuff, can enum inherit from enum?!
+    
+//TODO: add additional v4.0 frames - how do we check if the right enum member
+    //was used for ie. getFrame(ID3v2Frame.V40FRAME) where V40FRAME is a v4.0 frame
+    //as argument while the tagheader tells us its id3v2 v2.0 tag?
+    
+    /*
+     * probably its best to do a check, if(id3v2Header.getVersion() == ID3v2Constants.ID3V2_V20_BYTE)
+     * {
+     *      if(String.valueOf(ID3v2Frame.V40FRAME).length == 4)
+     *              throw new unsupportedframeexception();
+     * }
+     * 
+     * not really the most sexy possibility but it should do the job
+     */
     
 }
