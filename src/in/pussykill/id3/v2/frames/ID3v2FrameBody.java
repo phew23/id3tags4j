@@ -35,4 +35,11 @@ public abstract class ID3v2FrameBody {
         return b;
     }
     
+    /**
+     * @return The length of the frame body.
+     */
+    public int length() {
+        return b.length;
+    }
+    
 }
