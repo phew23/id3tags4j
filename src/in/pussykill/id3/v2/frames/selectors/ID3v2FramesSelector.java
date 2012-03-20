@@ -28,7 +28,7 @@ public class ID3v2FramesSelector implements ID3v2FrameSelector {
      */
     @Override
     public boolean wants(ID3v2Frame id3v2Frame) {
-        ID3v2FrameBody id3v2FrameBody = id3v2Frame.getID3v2FrameBody();
+        ID3v2FrameBody id3v2FrameBody = id3v2Frame.getFrameBody();
         switch(type) {
             case TXXX:
                 return id3v2FrameBody instanceof ID3v2TextFrameBody;
