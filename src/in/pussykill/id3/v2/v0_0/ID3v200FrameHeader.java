@@ -16,6 +16,7 @@
  */
 package in.pussykill.id3.v2.v0_0;
 
+import in.pussykill.id3.v2.ID3v2Constants;
 import in.pussykill.id3.v2.ID3v2Converter;
 import in.pussykill.id3.v2.frames.ID3v2FrameHeader;
 
@@ -33,14 +34,27 @@ public class ID3v200FrameHeader extends ID3v2FrameHeader {
         size = new byte[] { b[3], b[4], b[5] };
     }
     
+    /**
+     * @return The frame's identifier as String.
+     */
     @Override
     public String getIdentifier() {
          return new String(id);
     }
     
+    /**
+     * @return The frame body's length.
+     */
     @Override
     public int getFrameBodyLength() {
         return ID3v2Converter.id3v2FrameHeaderSizeToInteger(size);
+    }
+    
+    /**
+     * @return The length of the v2.0 frame header.
+     */
+    public int length() {
+        return ID3v2Constants.ID3V200_FRAME_HEADER_LENGTH;
     }
     
     @Override
@@ -49,5 +63,7 @@ public class ID3v200FrameHeader extends ID3v2FrameHeader {
                 getIdentifier() + ", frameBodyLength=" + getFrameBodyLength() +
                 "]";
     }
+
+
     
 }
