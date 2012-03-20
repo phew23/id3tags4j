@@ -38,14 +38,14 @@ public class ID3v2Frame {
     /**
      * @return The {@link ID3v2FrameHeader} of this frame.
      */
-    public ID3v2FrameHeader getID3v2FrameHeader() {
+    public ID3v2FrameHeader getFrameHeader() {
         return id3v2FrameHeader;
     }
     
     /**
      * @return The {@link ID3v2FrameBody} of this frame.
      */
-    public ID3v2FrameBody getID3v2FrameBody() {
+    public ID3v2FrameBody getFrameBody() {
         return id3v2FrameBody;
     }
  
