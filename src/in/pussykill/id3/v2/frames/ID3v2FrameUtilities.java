@@ -78,7 +78,7 @@ public class ID3v2FrameUtilities {
             text = Arrays.copyOfRange(body, 
                     separatorPos + separator.length, body.length);
         }
-        //<description> (no seperator found, -1)
+        //<description> (no seperator found, separatorPos < 0)
         else {
             description = body;
         }
