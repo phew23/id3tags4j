@@ -34,6 +34,11 @@ public class ID3v200FrameHeader extends ID3v2FrameHeader {
         size = new byte[] { b[3], b[4], b[5] };
     }
     
+    @Override
+    public byte[] getIdentifierBytes() {
+        return id;
+    }
+    
     /**
      * @return The frame's identifier as String.
      */
@@ -63,7 +68,5 @@ public class ID3v200FrameHeader extends ID3v2FrameHeader {
                 getIdentifier() + ", frameBodyLength=" + getFrameBodyLength() +
                 "]";
     }
-
-
     
 }
