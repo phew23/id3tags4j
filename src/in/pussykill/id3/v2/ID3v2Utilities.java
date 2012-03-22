@@ -66,6 +66,22 @@ public class ID3v2Utilities {
         return null;
     }
     
+    /**
+     * @param encoding The byte indicating the encoding.
+     * @return The charset as String.
+     */
+    public static String getEncoding(byte encoding) {
+        switch(encoding) 
+        {
+            case ID3v2Constants.ID3V2_TEXT_ENCODING_ISO_8859_1:
+                return "ISO-8859-1";
+            case ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE:
+                return "Unicode";
+            default:
+                return "ISO-8859-1";
+        }
+    }
+    
     public ID3v2Utilities() {
         throw new AssertionError();
     }
