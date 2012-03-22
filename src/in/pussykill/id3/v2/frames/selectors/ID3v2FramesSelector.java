@@ -4,7 +4,7 @@
  */
 package in.pussykill.id3.v2.frames.selectors;
 
-import in.pussykill.id3.v2.frames.ID3v2CommentsFrameBody;
+import in.pussykill.id3.v2.frames.ID3v2COMMFrameBody;
 import in.pussykill.id3.v2.frames.ID3v2Frame;
 import in.pussykill.id3.v2.frames.ID3v2FrameBody;
 import in.pussykill.id3.v2.frames.ID3v2TextFrameBody;
@@ -33,7 +33,7 @@ public class ID3v2FramesSelector implements ID3v2FrameSelector {
             case TXXX:
                 return id3v2FrameBody instanceof ID3v2TextFrameBody;
             case COMM:
-                return id3v2FrameBody instanceof ID3v2CommentsFrameBody;
+                return id3v2FrameBody instanceof ID3v2COMMFrameBody;
         }
         return false;
     }
