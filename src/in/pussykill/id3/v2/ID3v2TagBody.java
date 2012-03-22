@@ -88,6 +88,17 @@ public class ID3v2TagBody {
         }
         return id3v2Frames;
     }
+    
+    /**
+     * //TODO: padding is not included in the length yet, how to deal with that?
+     * @return The total length of this tag body.
+     */
+    public int length() {
+        int total = 0;
+        for(ID3v2Frame frame : frames)
+            total += frame.length();
+        return total;
+    }
 
     @Override
     public String toString() {
