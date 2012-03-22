@@ -30,8 +30,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class handles the creation of {@link MP3Files}.
@@ -120,7 +118,7 @@ public class MP3Utilities {
             int frameBodyLen = id3v230FrameHeader.getFrameBodyLength();
           
             //as soon as nothing else but padding is read we can stop parsing
-            if(!isID3v2Frame(id3v230FrameHeader.getIdentifier()))
+            if(!isID3v2Frame(id3v230FrameHeader.getIdentifierBytes()))
                 break;
 
             //copy all bytes of the frame into one array
@@ -146,25 +144,32 @@ public class MP3Utilities {
             String identifier = id3v230FrameHeader.getIdentifier();
             ID3v2Frame id3v2Frame = null;
             //if this frame is a text frame then parse the text frame's body
-           if(isID3v2TextFrame(identifier)) {
+           if(isID3v2TextFrame(id3v230FrameHeader.getIdentifierBytes())) {
                 ID3v2TextFrameBody id3v2TextFrameBody = 
                        ID3v2FrameUtilities.parseID3v2TextFrameBody(frameBody);
                 id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
                        id3v2TextFrameBody);
            }
+           //if this frame is a TXXX frame let's parse the TXXX-frame's body
+           else if(identifier.equals("TXXX")) {
+               ID3v2TXXXFrameBody id3v2TXXXFrameBody = 
+                       ID3v2FrameUtilities.parseID3v2TXXXFrameBody(frameBody);
+               id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
+                       id3v2TXXXFrameBody);
+           }
            //if this frame is a COMM frame let's parse the COMM-framebody
            else if(identifier.equals("COMM")) {
-                ID3v2CommentsFrameBody id3v2CommentsFrameBody = 
-                       ID3v2FrameUtilities.parseID3v2CommentsFrameBody(frameBody);
+                ID3v2COMMFrameBody id3v2COMMFrameBody = 
+                       ID3v2FrameUtilities.parseID3v2COMMFrameBody(frameBody);
                 id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
-                       id3v2CommentsFrameBody);
+                       id3v2COMMFrameBody);
            }
            //if this frame is an APIC frame let's parse the APIC-framebody
            else if(identifier.equals("APIC")) {
-                ID3v2AttachedPictureFrameBody id3v2AttachedPictureFrameBody =
-                       ID3v2FrameUtilities.parseID3v2AttachedPictureFrameBody(frameBody);
+                ID3v2APICFrameBody id3v2APICFrameBody =
+                       ID3v2FrameUtilities.parseID3v2APICFrameBody(frameBody);
                 id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
-                       id3v2AttachedPictureFrameBody);
+                       id3v2APICFrameBody);
            }
            
            if(id3v2Frame != null) {
@@ -177,12 +182,92 @@ public class MP3Utilities {
         return new ID3v230Tag(id3v2TagHeader, id3v2TagBody);
     }
     
-    //TODO: maybe replace this with byte[0] >= 'A' && byte[0] <= Z etc. for
-    //      performance, hence REGEX is very ressource-taking.
     /**
+     * Creates a new {@link ID3v240Tag} read from the {@link MP3File}.
+     * @param id3v2TagHeader The {@link ID3v2TagHeader} of the MP3.
+     * @return A new {@link ID3v240Tag}.
+     */
+    private static ID3v240Tag parseID3v240Tag(final ID3v2TagHeader id3v2TagHeader,
+            final RandomAccessFile raf) {
+        //TODO: to be implemented
+        ID3v2TagBody id3v2TagBody = null;
+        return new ID3v240Tag(id3v2TagHeader, id3v2TagBody);
+    }
+    
+    private static boolean isID3v2Frame(final byte[] b) {
+        //v3.0 and v4.0 identifiers have a length of 4 (ie. "TPE1", "TALB")
+        if(b.length == 4) {
+            if(b[0] >= 'A' && b[0] <= 'Z') {
+                if(b[1] >= 'A' && b[1] <= 'Z') {
+                    if(b[2] >= 'A' && b[2] <= 'Z') {
+                        if((b[3] >= 'A' && b[3] <= 'Z') ||
+                                (b[3] >= '0' && b[3] <= '9')) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        //v2.0 identifiers have a length of 3 (ie. "TP1", "TAB")
+        else if(b.length == 3) {
+            if(b[0] >= 'A' && b[0] <= 'Z') {
+                if(b[1] >= 'A' && b[1] <= 'Z') {
+                    if((b[2] >= 'A' && b[2] <= 'Z') ||
+                            (b[2] >= '0' && b[2] <= 'Z')) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * @param b - The identifier byte[] located in the frames 
+     *            {@link ID3v2FrameHeader}.
+     * @return True if the frame is a text frame; false otherwise.
+     */
+    private static boolean isID3v2TextFrame(final byte[] b) {
+        //v3.0 and v4.0 identifiers have a length of 4 (ie. "TPE1", "TALB")
+        if(b.length == 4) {
+            if(b[0] == 'T') {
+                //'TXXX' frame is to be excluded, this is the user defined text-
+                //information frame.
+                if(b[1] == 'X' && b[2] == 'X' && b[3] == 'X')
+                    return false;
+                if(b[1] >= 'A' && b[1] <= 'Z') {
+                    if(b[2] >= 'A' && b[2] <= 'Z') {
+                        if((b[3] >= 'A' && b[3] <= 'Z') || 
+                                (b[3] >= '0' && b[3] <= '0')) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        //v2.0 identifiers have a length of 3 (ie. "TP1", "TAB")
+        else if(b.length == 3) {
+            if(b[0] == 'T') {
+                //'TXX' is to be excluded, this is the user defined 
+                //textinformation frame.
+                if(b[1] == 'X' && b[2] == 'X')
+                    return false;
+                if(b[1] >= 'A' && b[1] <= 'Z') {
+                    if((b[2] >= 'A' && b[2] <= 'Z') ||
+                            (b[2] >= '0' && b[2] <= '9')) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    /*
+     *
      * @param identifier The identifier of the alleged frame.
      * @return True if the identifier indicates that it actually is a frame; false otherwise.
-     */
+     *
     private static boolean isID3v2Frame(final String identifier) {
         Pattern frames = 
                 Pattern.compile("[A-Z][A-Z](?:[A-Z]|[0-9])|[A-Z][A-Z][A-Z](?:[A-Z]|[0-9])");
@@ -192,10 +277,10 @@ public class MP3Utilities {
         return false;
     }
     
-    /**
+     *
      * @param identifier The identifier of the frame located in its {@link ID3v2FrameHeader}.
      * @return True if the frame is a text frame; false otherwise.
-     */
+     *
     private static boolean isID3v2TextFrame(final String identifier) {
         Pattern textFrames = 
                 Pattern.compile("T(?:[A-Z](?:[A-Z]|[0-9])|[A-Z][A-Z](?:[A-Z]|[0-9]))");
@@ -204,20 +289,6 @@ public class MP3Utilities {
             return true;
         return false;
     }
-    
-    /**
-     * Creates a new {@link ID3v240Tag} read from the {@link MP3File}.
-     * @param id3v2TagHeader The {@link ID3v2TagHeader} of the MP3.
-     * @return A new {@link ID3v240Tag}.
-     */
-    private static ID3v240Tag parseID3v240Tag(final ID3v2TagHeader id3v2TagHeader,
-            final RandomAccessFile raf) {
-        
-        ID3v2TagBody id3v2TagBody = null;
-        return new ID3v240Tag(id3v2TagHeader, id3v2TagBody);
-    }
-    
-    
-    
-    
+    */
+ 
 }
