@@ -39,15 +39,7 @@ public class ID3v2TextFrameBody extends ID3v2FrameBody {
      * @return The charset the body's text is encoded with.
      */
     public String getEncoding() {
-        switch(encoding) 
-        {
-            case ID3v2Constants.ID3V2_TEXT_ENCODING_ISO_8859_1:
-                return "ISO-8859-1";
-            case ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE:
-                return "Unicode";
-            default:
-                return "ISO-8859-1";
-        }
+        return ID3v2Utilities.getEncoding(encoding);
     }
     
     /**
