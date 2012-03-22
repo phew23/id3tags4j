@@ -39,15 +39,22 @@ public abstract class ID3v2Tag {
     /**
      * @return {@link ID3v2TagHeader} object for this {@link ID3v2Tag}.
      */
-    public ID3v2TagHeader getID3v2TagHeader() {
+    public ID3v2TagHeader getTagHeader() {
         return id3v2TagHeader;
     }
     
     /**
      * @return {@link ID3v2TagBody} object for this {@link ID3v2Tag}.
      */
-    public ID3v2TagBody getID3v2TagBody() {
+    public ID3v2TagBody getTagBody() {
         return id3v2TagBody;
+    }
+    
+    /**
+     * @return The total length of this ID3v2 tag.
+     */
+    public int length() {
+        return id3v2TagHeader.length() + id3v2TagBody.length();
     }
     
     @Override
