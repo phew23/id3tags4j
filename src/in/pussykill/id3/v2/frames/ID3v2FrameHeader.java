@@ -32,4 +32,9 @@ public abstract class ID3v2FrameHeader {
      */
     public abstract int getFrameBodyLength();
     
+    /**
+     * @return The identifier byte[].
+     */
+    public abstract byte[] getIdentifierBytes();
+    
 }
