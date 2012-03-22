@@ -54,6 +54,7 @@ public class ID3v2TXXXFrameBody extends ID3v2FrameBody {
      * @return The actual value of this user defined text information frame.
      */
     public String getValue() {
+         
         return ID3v2Utilities.getString(value, encoding);
     }
     
