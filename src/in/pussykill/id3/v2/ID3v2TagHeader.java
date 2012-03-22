@@ -82,6 +82,13 @@ public class ID3v2TagHeader {
         return ID3v2Converter.id3v2TagHeaderSizeToInteger(size);
     }
     
+    /**
+     * @return The length of this tag header.
+     */
+    public int length() {
+        return ID3v2Constants.ID3V2_TAG_HEADER_LENGTH;
+    }
+    
     @Override
     public String toString() {
         return "\t" + getClass().getSimpleName() + "=[identifier=" + 
