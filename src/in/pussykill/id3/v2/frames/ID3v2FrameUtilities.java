@@ -26,9 +26,12 @@ import java.util.Arrays;
 public class ID3v2FrameUtilities {
     
     /**
-     * This method parses the text frame body.
+     * This method parses the text information frame body.
      * @param b The text frame's body byte[]-Array.
      * @return {@link ID3v2TextFrameBody} object created from the given byte[].
+     * 
+     * Text encoding    $xx
+     * Information      <text string according to encoding>
      */
     public static ID3v2TextFrameBody parseID3v2TextFrameBody(final byte[] b) {
         final byte encoding = b[0];
@@ -37,12 +40,50 @@ public class ID3v2FrameUtilities {
     }
     
     /**
+     * This method parses the user defined text information frame body.
+     * @param b The text frame's body byte[].
+     * @return {@link ID3v2TXXXFrameBody} object created from the given byte[].
+     */
+    public static ID3v2TXXXFrameBody parseID3v2TXXXFrameBody(final byte[] b) {
+        byte[] body = Arrays.copyOfRange(b, 1, b.length);
+        
+        final byte encoding = b[0];
+        byte[] description = new byte[0];
+        byte[] value = new byte[0];
+        
+        byte[] separator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_ISO_8859_1;
+        if(encoding == ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE)
+            separator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_UNICODE;
+        
+        final int separatorPos = search(body, separator);
+        
+        if(separatorPos > 0) {
+            description = Arrays.copyOfRange(body, 0, separatorPos);
+            value = Arrays.copyOfRange(body, separatorPos + separator.length, 
+                    body.length);
+        }
+        else if(separatorPos == 0) {
+            value = Arrays.copyOfRange(body, separatorPos + separator.length,
+                    body.length);
+        }
+        else {
+            description = body;
+        }
+        
+        return new ID3v2TXXXFrameBody(b, encoding, description, value);
+    }
+    
+    /**
      * This method parses the "COMM" frame body.
      * @param b The "COMM" frame's body byte[].
-     * @return {@link ID3v2CommentsFrameBody} object created from the given 
-     *         byte[].
+     * @return {@link ID3v2COMMFrameBody} object created from the given byte[].
+     * 
+     * Text encoding           $xx
+     * Language                $xx xx xx
+     * Short content descrip.  <text string according to encoding> $00 (00)
+     * The actual text         <full text string according to encoding>
      */
-    public static ID3v2CommentsFrameBody parseID3v2CommentsFrameBody(
+    public static ID3v2COMMFrameBody parseID3v2COMMFrameBody(
             final byte[] b) {
         final byte[] body = Arrays.copyOfRange(b, 4, b.length);
         final byte encoding = b[0];
@@ -54,7 +95,7 @@ public class ID3v2FrameUtilities {
          * text is a 0x00-byte in ISO-8859-1 and two 0x00 bytes in Unicode.
          *             ISO-8859-1: 0x00
          *                Unicode: 0x00 0x00
-         * ID3v2CommentsFrameBody: <encoding><desc><seperator><text>
+         * ID3v2COMMFrameBody: <encoding><desc><seperator><text>
          */
         //ID3v2 v3.0 only has ISO-8859-1 and Unicode encodings in frames;
         //ISO-8859-1 (by default)
@@ -69,7 +110,8 @@ public class ID3v2FrameUtilities {
         
         //<desc>0x00<text>
         if(separatorPos > 0) {
-            description = Arrays.copyOfRange(body, 0, separatorPos - 1);
+            //TODO: text this case, might also be separatorPos-1.
+            description = Arrays.copyOfRange(body, 0, separatorPos);
             text = Arrays.copyOfRange(body, 
                     separatorPos + separator.length, body.length);
         }
@@ -83,15 +125,14 @@ public class ID3v2FrameUtilities {
             description = body;
         }
         
-        return new ID3v2CommentsFrameBody(b, encoding, language, description,
+        return new ID3v2COMMFrameBody(b, encoding, language, description,
                 text);
     }
     
     /**
      * This method parses the "APIC" frame body.
      * @param b The "APIC" frame's body byte[].
-     * @return A new {@link ID3v2AttachedPictureFrameBody} created from the 
-     *         given byte[].
+     * @return A new {@link ID3v2APICFrameBody} created from the given byte[].
      * 
      * Text encoding      $xx
      * MIME type          <text string> $00
@@ -99,8 +140,7 @@ public class ID3v2FrameUtilities {
      * Description        <text string according to encoding> $00 (00)
      * Picture data       <binary data>
      */
-    public static ID3v2AttachedPictureFrameBody 
-            parseID3v2AttachedPictureFrameBody(final byte[] b) {
+    public static ID3v2APICFrameBody parseID3v2APICFrameBody(final byte[] b) {
         final byte encoding = b[0];
         byte[] leftover = Arrays.copyOfRange(b, 1, b.length);
   
@@ -129,7 +169,7 @@ public class ID3v2FrameUtilities {
         byte[] pictureData = Arrays.copyOfRange(leftover, 
                 separatorPos + separator.length, leftover.length);
         
-        return new ID3v2AttachedPictureFrameBody(b, encoding, mimeType, 
+        return new ID3v2APICFrameBody(b, encoding, mimeType, 
                 pictureType, description, pictureData);
     }
 
