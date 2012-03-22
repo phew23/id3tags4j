@@ -75,6 +75,11 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader implements
     }
     
     @Override
+    public byte[] getIdentifierBytes() {
+        return id;
+    }
+    
+    @Override
     public String getIdentifier() {
         return new String(id);
     }
