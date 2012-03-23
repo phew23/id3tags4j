@@ -28,7 +28,7 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader implements
         ID3v230FrameHeaderFlagInterface {
     
     private final byte[] id;
-    protected final byte[] size;
+    protected byte[] size;
     protected final byte[] flags;
     
     //TODO: jdoc for flag bit methods
@@ -87,6 +87,13 @@ public class ID3v230FrameHeader extends ID3v2FrameHeader implements
     @Override
     public int getFrameBodyLength() {
         return ID3v2Converter.id3v2FrameHeaderSizeToInteger(size);
+    }
+    
+    /**
+     * @param length The new length of the frame's body.
+     */
+    public void setFrameBodyLength(int length) {
+        this.size = ID3v2Converter.id3v2FrameHeaderSizeToByteArray(length);
     }
     
     /**
