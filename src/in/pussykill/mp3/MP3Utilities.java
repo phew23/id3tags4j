@@ -47,13 +47,13 @@ public class MP3Utilities {
      *         exist
      * @throws IOException is thrown when the specified file could not be read
      */
-    public static MP3File init(final String path) throws FileNotFoundException, 
+    public static MP3File init(final File file) throws FileNotFoundException, 
             IOException {
         
         ID3v2TagHeader id3v2TagHeader;
         ID3v2Tag id3v2Tag = null;
         
-        RandomAccessFile raf = new RandomAccessFile(new File(path), "rw");
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
         
         byte[] id3v2TagHeaderBytes = 
                 new byte[ID3v2Constants.ID3V2_TAG_HEADER_LENGTH];
@@ -73,7 +73,7 @@ public class MP3Utilities {
                 ID3v2Constants.ID3V240_MINOR_VERSION)
             id3v2Tag = parseID3v240Tag(id3v2TagHeader, raf);
         
-        return new MP3File(id3v2Tag);
+        return new MP3File(file, id3v2Tag);
     }
     
     /**
@@ -118,8 +118,10 @@ public class MP3Utilities {
             int frameBodyLen = id3v230FrameHeader.getFrameBodyLength();
           
             //as soon as nothing else but padding is read we can stop parsing
-            if(!isID3v2Frame(id3v230FrameHeader.getIdentifierBytes()))
+            if(!isID3v2Frame(id3v230FrameHeader.getIdentifierBytes())) {
+                //TODO: calculate padding here
                 break;
+            }
 
             //copy all bytes of the frame into one array
             byte[] frame = Arrays.copyOfRange(tagBody, 0, frameBodyLen + 10);
@@ -143,11 +145,12 @@ public class MP3Utilities {
             
             String identifier = id3v230FrameHeader.getIdentifier();
             ID3v2Frame id3v2Frame = null;
+            
             //if this frame is a text frame then parse the text frame's body
            if(isID3v2TextFrame(id3v230FrameHeader.getIdentifierBytes())) {
-                ID3v2TextFrameBody id3v2TextFrameBody = 
+               ID3v2TextFrameBody id3v2TextFrameBody = 
                        ID3v2FrameUtilities.parseID3v2TextFrameBody(frameBody);
-                id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
+               id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
                        id3v2TextFrameBody);
            }
            //if this frame is a TXXX frame let's parse the TXXX-frame's body
@@ -170,6 +173,18 @@ public class MP3Utilities {
                        ID3v2FrameUtilities.parseID3v2APICFrameBody(frameBody);
                 id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
                        id3v2APICFrameBody);
+           }
+           else if(identifier.equals("PRIV")) {
+               ID3v2PRIVFrameBody id3v2PRIVFrameBody =
+                       ID3v2FrameUtilities.parseID3v2PRIVFrameBody(frameBody);
+               id3v2Frame = new ID3v2Frame(id3v230FrameHeader,
+                       id3v2PRIVFrameBody);
+           }
+           else if(identifier.equals("WXXX")) {
+               ID3v2WXXXFrameBody id3v2WXXXFrameBody =
+                       ID3v2FrameUtilities.parseID3v2WXXXFrameBody(frameBody);
+               id3v2Frame = new ID3v2Frame(id3v230FrameHeader, 
+                       id3v2WXXXFrameBody);
            }
            
            if(id3v2Frame != null) {
@@ -213,7 +228,7 @@ public class MP3Utilities {
             if(b[0] >= 'A' && b[0] <= 'Z') {
                 if(b[1] >= 'A' && b[1] <= 'Z') {
                     if((b[2] >= 'A' && b[2] <= 'Z') ||
-                            (b[2] >= '0' && b[2] <= 'Z')) {
+                            (b[2] >= '0' && b[2] <= '9')) {
                         return true;
                     }
                 }
@@ -231,14 +246,14 @@ public class MP3Utilities {
         //v3.0 and v4.0 identifiers have a length of 4 (ie. "TPE1", "TALB")
         if(b.length == 4) {
             if(b[0] == 'T') {
-                //'TXXX' frame is to be excluded, this is the user defined text-
+                //'TXXX' frame is to be excluded, this is the user defined text
                 //information frame.
                 if(b[1] == 'X' && b[2] == 'X' && b[3] == 'X')
                     return false;
                 if(b[1] >= 'A' && b[1] <= 'Z') {
                     if(b[2] >= 'A' && b[2] <= 'Z') {
                         if((b[3] >= 'A' && b[3] <= 'Z') || 
-                                (b[3] >= '0' && b[3] <= '0')) {
+                                (b[3] >= '0' && b[3] <= '9')) {
                             return true;
                         }
                     }
@@ -249,7 +264,7 @@ public class MP3Utilities {
         else if(b.length == 3) {
             if(b[0] == 'T') {
                 //'TXX' is to be excluded, this is the user defined 
-                //textinformation frame.
+                //text information frame.
                 if(b[1] == 'X' && b[2] == 'X')
                     return false;
                 if(b[1] >= 'A' && b[1] <= 'Z') {
