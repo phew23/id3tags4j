@@ -16,10 +16,16 @@
  */
 package in.pussykill.mp3;
 
-import in.pussykill.id3.v2.ID3v2Tag;
+import in.pussykill.id3.v2.*;
+import in.pussykill.id3.v2.frames.ID3v2Frame;
+import in.pussykill.id3.v2.frames.ID3v2FrameHeader;
+import in.pussykill.id3.v2.frames.ID3v2TextFrameBody;
+import in.pussykill.id3.v2.frames.selectors.ID3v2Frames;
 import in.pussykill.id3.v2.v0_0.ID3v200Tag;
+import in.pussykill.id3.v2.v3_0.ID3v230FrameHeader;
 import in.pussykill.id3.v2.v3_0.ID3v230Tag;
 import in.pussykill.id3.v2.v4_0.ID3v240Tag;
+import java.io.File;
 
 /**
  * This class represents a MP3 file.
@@ -27,14 +33,23 @@ import in.pussykill.id3.v2.v4_0.ID3v240Tag;
  */
 public class MP3File {
     
+    private final File file;
     private final ID3v2Tag id3v2Tag;
     
     /**
      * Creates a new MP3File with the given tag.
      * @param id3v2Tag - {@link ID3v2Tag} for this MP3File.
      */
-    public MP3File(ID3v2Tag id3v2Tag) {
+    public MP3File(final File file, final ID3v2Tag id3v2Tag) {
+        this.file = file;
         this.id3v2Tag = id3v2Tag;
+    }
+    
+    /**
+     * @return The {@link File} object for this MP3File.
+     */
+    public File getFile() {
+        return file;
     }
     
     /**
@@ -71,5 +86,34 @@ public class MP3File {
     public boolean hasID3v240Tag() {
         return id3v2Tag instanceof ID3v240Tag;
     }
+    
+    public void setArtist(final String artist, final ID3v2Charsets charset) {
+        ID3v2TagHeader id3v2TagHeader = id3v2Tag.getTagHeader();
+        ID3v2TagBody id3v2TagBody = id3v2Tag.getTagBody();
+        ID3v2Frame id3v2Frame = id3v2TagBody.getFrameByType(ID3v2Frames.TPE1);
+        if(id3v2Frame == null) {
+            return;
+            //create and add a new frame here
+        }
+        
+        ID3v2FrameHeader frameHeader = id3v2Frame.getFrameHeader();
+        ID3v2TextFrameBody frameBody = 
+                (ID3v2TextFrameBody) id3v2Frame.getFrameBody();
+        
+        //use ISO-8859-1 by default
+        byte encoding = ID3v2Constants.ID3V2_TEXT_ENCODING_ISO_8859_1;
+        if(charset == ID3v2Charsets.Unicode)
+            encoding = ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE;
+        
+        byte[] newValue = ID3v2Utilities.getBytes(artist, encoding);
+        
+        //update the ID3v2FrameHeader with the new ID3v2FrameBody size
+        if(frameHeader instanceof ID3v230FrameHeader) {
+            ID3v230FrameHeader id3v230FrameHeader = (ID3v230FrameHeader) frameHeader;
+            id3v230FrameHeader.setFrameBodyLength(newValue.length + 1);
+        }
+        
+        frameBody.setInformation(newValue, encoding);
+    } 
     
 }
