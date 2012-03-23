@@ -74,7 +74,7 @@ public class ID3v2FrameUtilities {
     }
     
     /**
-     * This method parses the "COMM" frame body.
+     * This method parses the 'COMM' frame body.
      * @param b The "COMM" frame's body byte[].
      * @return {@link ID3v2COMMFrameBody} object created from the given byte[].
      * 
@@ -130,7 +130,7 @@ public class ID3v2FrameUtilities {
     }
     
     /**
-     * This method parses the "APIC" frame body.
+     * This method parses the 'APIC' frame body.
      * @param b The "APIC" frame's body byte[].
      * @return A new {@link ID3v2APICFrameBody} created from the given byte[].
      * 
@@ -172,6 +172,69 @@ public class ID3v2FrameUtilities {
         return new ID3v2APICFrameBody(b, encoding, mimeType, 
                 pictureType, description, pictureData);
     }
+    
+    /**
+     * This method parses the 'PRIV' frame body.
+     * @param b The 'PRIV' frame's body byte[].
+     * @return A new {@link ID3v2PRIVFrameBody} created from the given byte[].
+     * 
+     * Owner identifier        <text string> $00
+     * The private data        <binary data>
+     */
+    public static ID3v2PRIVFrameBody parseID3v2PRIVFrameBody(final byte[] b) {
+        byte[] separator = ID3v2Constants.ID3V2_SINGLE_SEPERATOR;
+        
+        byte[] ownerIdentifier = new byte[0];
+        byte[] privateData = new byte[0];
+        
+        int separatorPos = search(b, separator);
+        if(separatorPos == 0) {
+            privateData = Arrays.copyOfRange(b, separatorPos + 1, b.length);
+        } 
+        else if(separatorPos > 0) {
+            ownerIdentifier = Arrays.copyOfRange(b, 0, separatorPos);
+            privateData = Arrays.copyOfRange(b, separatorPos + separator.length,
+                    b.length);
+        }
+        
+        return new ID3v2PRIVFrameBody(b, ownerIdentifier, privateData);    
+    }
+    
+    /**
+     * This method parses the 'WXXX' frame body.
+     * @param b The 'WXXX' frame's body byte[].
+     * @return A new {@link ID3v2WXXXFrameBody} created from the given byte[].
+     * 
+     * Text encoding    $xx
+     * Description      <text string according to encoding> $00 (00)
+     * URL              <text string>
+     */
+    public static ID3v2WXXXFrameBody parseID3v2WXXXFrameBody(final byte[] b) {
+        final byte encoding = b[0];
+        
+        byte[] body = Arrays.copyOfRange(b, 1, b.length);
+        
+        byte[] description = new byte[0];
+        byte[] url = new byte[0];
+        
+        byte[] separator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_ISO_8859_1;
+        if(encoding == ID3v2Constants.ID3V2_TEXT_ENCODING_UNICODE)
+            separator = ID3v2Constants.ID3V2_TEXT_SEPERATOR_UNICODE;
+        
+        int separatorPos = search(body, separator);
+        if(separatorPos > 0) {
+            description = Arrays.copyOfRange(body, 0, separatorPos);
+            url = Arrays.copyOfRange(body, separatorPos + separator.length, 
+                    body.length);
+        }
+        else if(separatorPos == 0) {
+            url = Arrays.copyOfRange(body, separatorPos + separator.length, 
+                    body.length);
+        }
+        
+        return new ID3v2WXXXFrameBody(b, encoding, description, url);
+    }
+    
 
     
     /**
