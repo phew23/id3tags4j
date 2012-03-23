@@ -38,11 +38,15 @@ public class ID3v2Constants {
         //public static final int ID3V240_FRAME_HEADER_LENGTH = 10;
                 
         /*
-	 * ID3v2 text encoding bytes
+	 * ID3v2 text encoding
 	 */
 	public static final int ID3V2_TEXT_ENCODING_ISO_8859_1 = 0x00;
 	public static final int ID3V2_TEXT_ENCODING_UNICODE = 0x01;
     
+        public static final String ID3V2_TEXT_ENCODING_CHARSET_ISO_8859_1 =
+                "ISO-8859-1";
+        public static final String ID3V2_TEXT_ENCODING_CHARSET_UNICODE = 
+                "Unicode";
         
         
 	/*
