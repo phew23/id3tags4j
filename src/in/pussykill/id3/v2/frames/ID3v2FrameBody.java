@@ -22,7 +22,7 @@ package in.pussykill.id3.v2.frames;
  */
 public abstract class ID3v2FrameBody {
     
-    private final byte[] b;
+    private byte[] b;
     
     public ID3v2FrameBody(final byte[] b) {
         this.b = b;
@@ -41,5 +41,12 @@ public abstract class ID3v2FrameBody {
     public int length() {
         return b.length;
     }
+    
+    /**
+     * @param b The new byte[] containing all frame body bytes.
+     */
+    protected void setBytes(final byte[] b) {
+        this.b = b;
+    } 
     
 }
