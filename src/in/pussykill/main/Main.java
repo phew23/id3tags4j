@@ -16,7 +16,6 @@
  */
 package in.pussykill.main;
 
-import in.pussykill.id3.v2.ID3v2Tag;
 import in.pussykill.mp3.MP3File;
 import in.pussykill.mp3.MP3Utilities;
 import java.io.File;
@@ -29,26 +28,20 @@ import java.io.IOException;
  */
 public class Main {
     
-    public static void main(String... args) {
-        try {
-            
-           File[] mp3s = new File("files").listFiles();
-           for(File f : mp3s) {
-                MP3File mp3 = MP3Utilities.init(f.getAbsolutePath());
-                if(!mp3.hasID3v2Tag())
-                    continue;
-                
-                ID3v2Tag id3v2Tag = mp3.getID3v2Tag();
-                System.out.println(id3v2Tag);
-                System.out.println();
-                
-           }
-            
-        } catch (FileNotFoundException ex) {
-            System.err.println(ex);
-        } catch (IOException ex) {
-            System.err.println(ex);
-        }
+    public static void main(String... args) throws FileNotFoundException, 
+            IOException {
+
+            File f = new File("files/");
+            File[] files = f.listFiles();
+
+            for(File file : files) {
+                MP3File mp3 = MP3Utilities.init(file);
+                if(mp3.hasID3v2Tag()) {
+                    System.out.println(mp3.getID3v2Tag());
+                }
+            }
+
+
     }
     
 }
