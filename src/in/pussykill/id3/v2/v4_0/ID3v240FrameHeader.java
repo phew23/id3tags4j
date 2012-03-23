@@ -82,8 +82,7 @@ public class ID3v240FrameHeader extends ID3v230FrameHeader implements
     
     @Override
     public int getFrameBodyLength() {
-        //TODO:
-        //the size of the body is not encapsulated as in a usual v3.0 tag,
+        //TODO: the size of the body is not encapsulated as in a usual v3.0 tag,
         //it rather uses 7 bits, ignoring the MSB (which is always unset).
         //while v3.0 uses: $00 00 00 00 == 4 bytes
         //      v4.0 uses: %0xxxxxxx %0xxxxxxx %0xxxxxxx %0xxxxxxx == 4 bytes
