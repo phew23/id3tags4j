@@ -16,6 +16,7 @@
  */
 package in.pussykill.main;
 
+import in.pussykill.id3.v2.ID3v2Charsets;
 import in.pussykill.mp3.MP3File;
 import in.pussykill.mp3.MP3Utilities;
 import java.io.File;
@@ -31,17 +32,15 @@ public class Main {
     public static void main(String... args) throws FileNotFoundException, 
             IOException {
 
-            File f = new File("files/");
+            File f = new File("files/q.mp3");
+            MP3File mp3 = MP3Utilities.init(f);
+            if(mp3.hasID3v2Tag())
+                System.out.println(mp3.getID3v2Tag());
             File[] files = f.listFiles();
 
-            for(File file : files) {
-                MP3File mp3 = MP3Utilities.init(file);
-                if(mp3.hasID3v2Tag()) {
-                    System.out.println(mp3.getID3v2Tag());
-                }
-            }
-
-
+            mp3.setArtist("Yo yo yo", ID3v2Charsets.ISO_8859_1);
+            
+            System.out.println(mp3.getID3v2Tag());
     }
     
 }
