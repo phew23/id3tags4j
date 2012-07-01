@@ -25,7 +25,7 @@ public class ID3v2TagHeader {
     private final byte[] id;
     private final byte[] version;
     private final byte flag;
-    private final byte[] size;
+    private byte[] size;
 
     /**
      * Creates a new ID3v2TagHeader from the given byte chain.
@@ -80,6 +80,14 @@ public class ID3v2TagHeader {
      */
     public int getTagBodyLength() {
         return ID3v2Converter.id3v2TagHeaderSizeToInteger(size);
+    }
+    
+    /**
+     * Encodes a new size into the size byte[].
+     * @param s Integer value of the new size.
+     */
+    public void setTagBodyLength(int s) {
+        size = ID3v2Converter.id3v2TagHeaderSizeToByteArray(s);
     }
     
     /**
