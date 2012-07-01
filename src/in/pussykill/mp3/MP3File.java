@@ -90,6 +90,9 @@ public class MP3File {
     public void setArtist(final String artist, final ID3v2Charsets charset) {
         ID3v2TagHeader id3v2TagHeader = id3v2Tag.getTagHeader();
         ID3v2TagBody id3v2TagBody = id3v2Tag.getTagBody();
+        
+        System.out.println("old length: " + id3v2Tag.length());
+        
         ID3v2Frame id3v2Frame = id3v2TagBody.getFrameByType(ID3v2Frames.TPE1);
         if(id3v2Frame == null) {
             return;
@@ -109,9 +112,14 @@ public class MP3File {
         
         //update the ID3v2FrameHeader with the new ID3v2FrameBody size
         if(frameHeader instanceof ID3v230FrameHeader) {
-            ID3v230FrameHeader id3v230FrameHeader = (ID3v230FrameHeader) frameHeader;
+            ID3v230FrameHeader id3v230FrameHeader = (ID3v230FrameHeader) 
+                    frameHeader;
             id3v230FrameHeader.setFrameBodyLength(newValue.length + 1);
         }
+        
+        //set the new tag body length (not sure if this works properly)
+        //no padding used here!
+        id3v2TagHeader.setTagBodyLength(id3v2TagBody.length());
         
         frameBody.setInformation(newValue, encoding);
     } 
